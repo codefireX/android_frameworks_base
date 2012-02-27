@@ -2625,7 +2625,12 @@ public final class Settings {
         public static final String WEATHER_CUSTOM_LOCATION = "weather_custom_location";
 
         /**
-         * Stores the weather update frequency
+         * Show the NavBar dialog in Power menu
+         * @hide
+         */
+        public static final String POWER_DIALOG_SHOW_NAVBAR_HIDE = "power_dialog_show_navbar_hide";
+
+         /**
          * @hide
          */
         public static final String WEATHER_UPDATE_INTERVAL = "weather_update_interval";
