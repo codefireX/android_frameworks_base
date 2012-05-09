@@ -3944,4 +3944,7 @@
   <java-symbol type="id" name="navbarback" />
   <java-symbol type="id" name="navbarmenu" />
 
+  <!-- IME Picker showing upon pressing Sym Key -->
+  <java-symbol type="bool" name="config_symKeyShowsImePicker" />
+
 </resources>
