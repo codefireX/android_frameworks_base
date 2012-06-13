@@ -3425,6 +3425,20 @@ public final class Settings {
         public static final String NAVIGATION_BAR_TINT = "navigation_bar_tint";
 
         /**
+         * Determine friction of scrolling
+         *
+         * @hide
+         */
+        public static final String SCROLL_FRICTION = "scroll_friction";
+
+        /**
+         * Determine custom fling velocity
+         *
+         * @hide
+         */
+        public static final String CUSTOM_FLING_VELOCITY = "custom_fling_velocity";
+
+        /**
          * @hide
          */
         public static final String NAVIGATION_BAR_GLOW_TINT = "navigation_bar_glow_tint";
