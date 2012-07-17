@@ -3148,14 +3148,18 @@ public final class Settings {
 
         /**
          * whether to hide the kill-all-button on recent switcher
-         *
          * @hide
          */
         public static final String RECENT_KILL_ALL_BUTTON = "recent_kill_all_button";
 
         /**
+         * Whether the UI is initiated in tablet UI (false = phone UI)
+         * @hide
+         */
+        public static final String TABLET_UI = "tablet_ui";
+
+        /**
          * whether to show the navigation bar
-         *
          * @hide
          */
         public static final String NAVIGATION_BAR_SHOW = "navigation_bar_show";

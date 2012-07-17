@@ -1368,6 +1368,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // disabled by the user.
         }
 
+        Settings.System.putBoolean(mContext.getContentResolver(), Settings.System.TABLET_UI, mHasNavigationBar);
+
         if (mHasSystemNavBar) {
             // The system bar is always at the bottom.  If you are watching
             // a video in landscape, we don't need to hide it if we can still
