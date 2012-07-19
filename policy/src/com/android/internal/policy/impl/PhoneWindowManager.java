@@ -3479,9 +3479,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         mLidState = newLidState;
         applyLidSwitchState();
+        boolean awakeNow = mKeyguardMediator.doLidChangeTq(mLidState == LID_OPEN);
         updateRotation(true);
 
-        if (lidOpen) {
+        if (awakeNow) {
+            // If the lid is opening and we don't have to keep the
+            // keyguard up, then we can turn on the screen
+            // immediately.
+            mKeyguardMediator.pokeWakelock();
+        } else if (lidOpen) {
             if (keyguardIsShowingTq()) {
                 mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(
                         KeyEvent.KEYCODE_POWER, mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED);

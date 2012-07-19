@@ -74,6 +74,8 @@ public class KeyguardUpdateMonitor {
 
     private boolean mDeviceProvisioned;
 
+    private boolean mKeyguardBypassEnabled;
+
     private BatteryStatus mBatteryStatus;
 
     private CharSequence mTelephonyPlmn;
@@ -216,6 +218,9 @@ public class KeyguardUpdateMonitor {
                 }
             }
         };
+
+        mKeyguardBypassEnabled = context.getResources().getBoolean(
+                                                                   com.android.internal.R.bool.config_bypass_keyguard_if_slider_open);
 
         mDeviceProvisioned = Settings.Secure.getInt(
                 mContext.getContentResolver(), Settings.Secure.DEVICE_PROVISIONED, 0) != 0;
@@ -660,6 +665,10 @@ public class KeyguardUpdateMonitor {
      */
     public void reportSimUnlocked() {
         handleSimStateChange(new SimArgs(IccCard.State.READY));
+    }
+
+    public boolean isKeyguardBypassEnabled() {
+        return mKeyguardBypassEnabled;
     }
 
     public boolean isDevicePluggedIn() {

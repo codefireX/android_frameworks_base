@@ -250,6 +250,7 @@
   <java-symbol type="bool" name="config_enable_puk_unlock_screen" />
   <java-symbol type="bool" name="config_mms_content_disposition_support" />
   <java-symbol type="bool" name="config_showMenuShortcutsWhenKeyboardPresent" />
+  <java-symbol type="bool" name="config_bypass_keyguard_if_slider_open" />
   <java-symbol type="bool" name="config_sip_wifi_only" />
   <java-symbol type="bool" name="config_sms_capable" />
   <java-symbol type="bool" name="config_sms_utf8_support" />
