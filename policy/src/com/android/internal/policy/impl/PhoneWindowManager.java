@@ -3684,13 +3684,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         try {
-            int rotation = mWindowManager.getRotation();
-            if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_180) {
-                // Switch the volume keys around.
-                if (keycode == KeyEvent.KEYCODE_VOLUME_UP)
-                    keycode = KeyEvent.KEYCODE_VOLUME_DOWN;
-                else
-                    keycode = KeyEvent.KEYCODE_VOLUME_UP;
+            if (Settings.System.getInt(mContext.getContentResolver(),
+                    EOSConstants.SYSTEM_VOLUME_KEYS_SWITCH_ON_ROTATION,
+                    EOSConstants.SYSTEM_VOLUME_KEYS_SWITCH_ON_ROTATION_DEF) == 1) {
+                int rotation = mWindowManager.getRotation();
+                if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_180) {
+                    // Switch the volume keys around.
+                    if (keycode == KeyEvent.KEYCODE_VOLUME_UP)
+                        keycode = KeyEvent.KEYCODE_VOLUME_DOWN;
+                    else
+                        keycode = KeyEvent.KEYCODE_VOLUME_UP;
+                }
             }
         } catch (RemoteException e1) {
         }
