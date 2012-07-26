@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
@@ -93,6 +94,7 @@ public class NavigationBarView extends LinearLayout {
     private Drawable mBackIcon, mBackLandIcon, mBackAltIcon, mBackAltLandIcon;
     
     private DelegateViewHelper mDelegateHelper;
+    private Context mContext;
 
     // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
     final static boolean WORKAROUND_INVALID_LAYOUT = true;
@@ -220,6 +222,7 @@ public class NavigationBarView extends LinearLayout {
 
     public NavigationBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
 
         mHidden = false;
 
@@ -238,6 +241,14 @@ public class NavigationBarView extends LinearLayout {
         mBackLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_land);
         mBackAltIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime);
         mBackAltLandIcon = res.getDrawable(R.drawable.ic_sysbar_back_ime_land);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.SYSTEMUI_NAVBAR_COLOR), $
+                new ContentObserver(new Handler()) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        updateColor();
+                    }
+                });
     }
 
     private void makeBar() {
@@ -291,7 +302,7 @@ public class NavigationBarView extends LinearLayout {
             }
         }
     }
-    
+
     private void addLightsOutButton(LinearLayout root, View v, boolean landscape, boolean empty) {
 
         ImageView addMe = new ImageView(mContext);
@@ -314,7 +325,7 @@ public class NavigationBarView extends LinearLayout {
         else
             root.addView(addMe);
     }
-    
+
     private View generateKey(boolean landscape, int keyId) {
         KeyButtonView v = null;
         Resources r = getResources();
@@ -355,7 +366,7 @@ public class NavigationBarView extends LinearLayout {
 
         return null;
     }
-    
+
     private ExtensibleKeyButtonView generateKey(boolean landscape, String clickAction,
             String longpress,
             String iconUri) {
@@ -694,12 +705,14 @@ public class NavigationBarView extends LinearLayout {
                  ? findViewById(R.id.rot90)
                  : findViewById(R.id.rot270);
 
+<<<<<<< HEAD
          for (View v : mRotatedViews) {
              // this helps avoid drawing artifacts with glowing navigation keys
              ViewGroup group = (ViewGroup) v.findViewById(R.id.nav_buttons);
              group.setMotionEventSplittingEnabled(false);
          }
          mCurrentView = mRotatedViews[Surface.ROTATION_0];
+         updateColor();
 
          // this takes care of making the buttons
          SettingsObserver settingsObserver = new SettingsObserver(new Handler());
@@ -922,5 +935,67 @@ public class NavigationBarView extends LinearLayout {
             default:
                 return "VISIBLE";
         }
+    }
+
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        pw.println("NavigationBarView {");
+        final Rect r = new Rect();
+
+        pw.println(String.format("      this: " + PhoneStatusBar.viewInfo(this)
+                        + " " + visibilityToString(getVisibility())));
+
+        getWindowVisibleDisplayFrame(r);
+        final boolean offscreen = r.right > mDisplay.getRawWidth()
+            || r.bottom > mDisplay.getRawHeight();
+        pw.println("      window: "
+                + r.toShortString()
+                + " " + visibilityToString(getWindowVisibility())
+                + (offscreen ? " OFFSCREEN!" : ""));
+
+        pw.println(String.format("      mCurrentView: id=%s (%dx%d) %s",
+                        getResourceName(mCurrentView.getId()),
+                        mCurrentView.getWidth(), mCurrentView.getHeight(),
+                        visibilityToString(mCurrentView.getVisibility())));
+
+        pw.println(String.format("      disabled=0x%08x vertical=%s hidden=%s low=%s menu=%s",
+                        mDisabledFlags,
+                        mVertical ? "true" : "false",
+                        mHidden ? "true" : "false",
+                        mLowProfile ? "true" : "false",
+                        mShowMenu ? "true" : "false"));
+
+        final View back = getBackButton();
+        final View home = getHomeButton();
+        final View recent = getRecentsButton();
+        final View menu = getMenuButton();
+
+        pw.println("      back: "
+                + PhoneStatusBar.viewInfo(back)
+                + " " + visibilityToString(back.getVisibility())
+                );
+        pw.println("      home: "
+                + PhoneStatusBar.viewInfo(home)
+                + " " + visibilityToString(home.getVisibility())
+                );
+        pw.println("      rcnt: "
+                + PhoneStatusBar.viewInfo(recent)
+                + " " + visibilityToString(recent.getVisibility())
+                );
+        pw.println("      menu: "
+                + PhoneStatusBar.viewInfo(menu)
+                + " " + visibilityToString(menu.getVisibility())
+                );
+        pw.println("    }");
+    }
+
+    private void updateColor() {
+        int color = Settings.System.getInt(mContext.getContentResolver(),
+                .SYSTEMUI_NAVBAR_COLOR,
+                Settings.System.SYSTEMUI_NAVBAR_COLOR_DEF);
+        if (color == -1)
+            color = Settings.System.SYSTEMUI_NAVBAR_COLOR_DEF;
+        // we don't want alpha here
+        color = Color.rgb(Color.red(color), Color.green(color), Color.blue(color));
+        this.setBackgroundColor(color);
     }
 }
