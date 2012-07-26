@@ -54,7 +54,6 @@ public:
           mWantUTF16(false), mValues(false),
           mCompressionMethod(0), mOutputAPKFile(NULL),
           mManifestPackageNameOverride(NULL), mInstrumentationPackageNameOverride(NULL),
-          mIsOverlayPackage(false),
           mAutoAddOverlay(false), mGenDependencies(false),
           mAssetSourceDir(NULL), 
           mCrunchedOutputDir(NULL), mProguardFile(NULL),
@@ -110,8 +109,6 @@ public:
     void setManifestPackageNameOverride(const char * val) { mManifestPackageNameOverride = val; }
     const char* getInstrumentationPackageNameOverride() const { return mInstrumentationPackageNameOverride; }
     void setInstrumentationPackageNameOverride(const char * val) { mInstrumentationPackageNameOverride = val; }
-    bool getIsOverlayPackage() const { return mIsOverlayPackage; }
-    void setIsOverlayPackage(bool val) { mIsOverlayPackage = val; }
     bool getAutoAddOverlay() { return mAutoAddOverlay; }
     void setAutoAddOverlay(bool val) { mAutoAddOverlay = val; }
     bool getGenDependencies() { return mGenDependencies; }
@@ -254,7 +251,6 @@ private:
     const char* mOutputAPKFile;
     const char* mManifestPackageNameOverride;
     const char* mInstrumentationPackageNameOverride;
-    bool        mIsOverlayPackage;
     bool        mAutoAddOverlay;
     bool        mGenDependencies;
     const char* mAssetSourceDir;
