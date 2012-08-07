@@ -552,6 +552,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Behavior of ENDCALL Button.  (See Settings.System.END_BUTTON_BEHAVIOR.)
     int mEndcallBehavior;
 
+    // Behavior of trackball wake
+    boolean mTrackballWakeScreen;
+
+    // Behavior of trackball unlock
+    boolean mTrackballUnlockScreen;
+
     // Behavior of POWER button while in-call and screen on.
     // (See Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR.)
     int mIncallPowerBehavior;
@@ -658,6 +664,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     "fancy_rotation_anim"), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.TRACKBALL_WAKE_SCREEN), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.TRACKBALL_UNLOCK_SCREEN), false, this);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.SCREENSAVER_ENABLED), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -1384,6 +1394,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.VOLUME_WAKE_SCREEN, 0) == 1);
             mVolBtnMusicControls = (Settings.System.getInt(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1) == 1);
+            mTrackballWakeScreen = (Settings.System.getInt(resolver,
+                    Settings.System.TRACKBALL_WAKE_SCREEN, 1) == 1);
+            mTrackballUnlockScreen = (Settings.System.getInt(resolver,
+                    Settings.System.TRACKBALL_UNLOCK_SCREEN, 0) == 1);
 
             boolean keyRebindingEnabled = Settings.System.getInt(resolver,
                     Settings.System.HARDWARE_KEY_REBINDING, 0) == 1;
@@ -3991,8 +4005,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         final int policyflag = (policyFlags
                 & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED));
-        final boolean isWakeMotion = (policyflag != 0);
-            // Quick hack to (permanently) enable trackball wake.  policyflag is hacked as 3 when pressed.
+        if (DEBUG) Log.d(TAG, "MotionEvent: policyflag=" + policyflag);
+        if (DEBUG) Log.d(TAG, "MotionEvent: mTrackballWakeScreen=" + mTrackballWakeScreen);
+        final boolean isWakeMotion = (policyflag != 0) && (policyflag != 3)
+            // mouse events will produce a 1 (WAKE) or 2 (WAKE_DROPPED) but never 3,
+            // so we can assign 3 as a special value for the legacy trackball motion events
+            // in InputReader.cpp so we can AND it with a toggle setting
+            // This is really wrong but seems to work without affecting other input
+            // devices ability to wake the device.
+            || ((policyflag == 3) && mTrackballWakeScreen);
         if (isWakeMotion) {
             if (mKeyguardMediator != null && mKeyguardMediator.isShowing()) {
                 // If the keyguard is showing, let it decide what to do with the wake motion.
