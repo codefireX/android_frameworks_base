@@ -1347,7 +1347,7 @@ public class WifiP2pService extends IWifiP2pManager.Stub {
                             changed = true;
                         }
                     }
-
+                    mWifiNative.setP2pGroupIdle(mGroup.getInterface(), 0);
                     if (mGroup.isGroupOwner()) {
                         stopDhcpServer();
                     } else {
