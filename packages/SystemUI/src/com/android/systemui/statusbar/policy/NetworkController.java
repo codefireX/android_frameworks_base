@@ -44,7 +44,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
-import android.util.log;
+import android.util.Log;
 import android.util.Slog;
 import android.view.View;
 import android.widget.ImageView;
@@ -504,23 +504,16 @@ public class NetworkController extends BroadcastReceiver {
                 mLastSignalLevel = iconLevel = (useSixBar) ?
                         mSignalStrength.getSixBarLevel() : mSignalStrength.getLevel();
 
-                if (isCdma()) {
-                    if (isCdmaEri()) {
-                        if (useSixBar) {
-                            iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_6BAR[mInetCondition];
-                        } else {
-                            iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING[mInetCondition];
-                        }
-                    }
+                if (useSixBar) {
+                    iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_6BAR[mInetCondition];
                 } else {
-                    // Though mPhone is a Manager, this call is not an IPC
-                    if (mPhone.isNetworkRoaming()) {
-                        if (useSixBar) {
-                            iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_6BAR[mInetCondition];
-                        } else {
-                            iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING[mInetCondition];
-                        }
+                    if ((isCdma() && isCdmaEri()) || mPhone.isNetworkRoaming()) {
+                        iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH_ROAMING[mInetCondition];
+                    } else {
+                        iconList = TelephonyIcons.TELEPHONY_SIGNAL_STRENGTH[mInetCondition];
+                    }
                 }
+
                 mPhoneSignalIconId = iconList[iconLevel];
                 mContentDescriptionPhoneSignal = mContext.getString(
                         AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[iconLevel]);
