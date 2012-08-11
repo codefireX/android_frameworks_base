@@ -28,6 +28,8 @@ import android.util.Log;
 import android.view.IWindowManager;
 import android.view.Surface;
 
+import org.teameos.jellybean.settings.EOSConstants;
+
 /**
  * Provides helper functions for configuring the display rotation policy.
  */
@@ -53,11 +55,21 @@ public final class RotationPolicy {
      * Returns true if the rotation-lock toggle should be shown in the UI.
      */
     public static boolean isRotationLockToggleVisible(Context context) {
-        return isRotationLockToggleSupported(context) &&
+        boolean visible;
+
+        String rotationToggleMode = Settings.System.getString(context.getContentResolver(),
+                                            Settings.System.SYSTEMUI_INTERFACE_ROTATIONLOCK_TOGGLE);
+
+        if ("show".equals(rotationToggleMode)) {
+            visible = true;
+        } else if ("hide".equals(rotationToggleMode)) {
+            visible = false;
+        } else {
+            visible = isRotationLockToggleSupported(context) &&
                 Settings.System.getInt(context.getContentResolver(),
-                        Settings.System.HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY, 0) == 0 &&
-                !context.getResources().getBoolean(com.android
-                        .internal.R.bool.config_hasRotationLockSwitch);
+                        Settings.System.HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY, 0) == 0;
+        }
+        return visible;
     }
 
     /**
@@ -133,6 +145,9 @@ public final class RotationPolicy {
                 false, listener.mObserver);
         context.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                 Settings.System.HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY),
+                false, listener.mObserver);
+        context.getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                EOSConstants.SYSTEMUI_INTERFACE_ROTATIONLOCK_TOGGLE),
                 false, listener.mObserver);
     }
 

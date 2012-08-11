@@ -3202,6 +3202,11 @@ public final class Settings {
         public static final String SYSTEMUI_RECENTS_MEM_DISPLAY = "interface_recents_mem_display";
 
         /**
+         * @hide
+         */
+        public static final String SYSTEMUI_INTERFACE_ROTATIONLOCK_TOGGLE = "interface_rotationlock_toggle";
+
+        /**
          * Whether the UI is initiated in tablet UI (false = phone UI)
          * @hide
          *  0 = Phone UI
