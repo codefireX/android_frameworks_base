@@ -342,9 +342,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mStatusBarHeight;
     WindowState mNavigationBar = null;
     boolean mHasNavigationBar = false;
-    // in order to properly setup the NavBar and still be able to hide it when the user
-    // selects to, I need to know if its first boot.
-    private boolean mNavBarFirstBootFlag = true;
     boolean mCanHideNavigationBar = false;
     boolean mNavigationBarCanMove = false; // can the navigation bar ever move to the side?
     boolean mNavigationBarOnBottom = true; // is the navigation bar on the bottom *right now*?
@@ -691,8 +688,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.KEY_APP_SWITCH_LONG_PRESS_ACTION), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HARDWARE_KEY_REBINDING), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_SHOW), false, this);
             if (SEPARATE_TIMEOUT_FOR_SCREEN_SAVER) {
                 resolver.registerContentObserver(Settings.Secure.getUriFor(
                         "screensaver_timeout"), false, this);
@@ -1011,6 +1006,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 try {
                     IStatusBarService statusbar = getStatusBarService();
                     if (statusbar != null) {
+                        // TODO: Make this an option, for testing only right now
+                        //statusbar.toggleNotificationShade();
                         statusbar.toggleRecentApps();
                         mRecentAppsPreloaded = false;
                     }
@@ -1288,113 +1285,107 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // Height of the navigation bar when presented horizontally at bottom
         mNavigationBarHeightForRotation[mPortraitRotation] =
         mNavigationBarHeightForRotation[mUpsideDownRotation] =
-                Settings.System.getInt(
-                    mContext.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_HEIGHT,
-                    mContext.getResources()
-                            .getDimensionPixelSize(
-                                    com.android.internal.R.dimen.navigation_bar_height));
-
+                mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_height);
         mNavigationBarHeightForRotation[mLandscapeRotation] =
         mNavigationBarHeightForRotation[mSeascapeRotation] =
-                Settings.System.getInt(
-                    mContext.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_HEIGHT_LANDSCAPE,
-                    mContext.getResources()
-                            .getDimensionPixelSize(
-                                    com.android.internal.R.dimen.navigation_bar_height_landscape));
+                mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_height_landscape);
 
         // Width of the navigation bar when presented vertically along one side
         mNavigationBarWidthForRotation[mPortraitRotation] =
         mNavigationBarWidthForRotation[mUpsideDownRotation] =
         mNavigationBarWidthForRotation[mLandscapeRotation] =
         mNavigationBarWidthForRotation[mSeascapeRotation] =
-                Settings.System.getInt(
-                    mContext.getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_WIDTH,
-                    mContext.getResources()
-                            .getDimensionPixelSize(
-                                    com.android.internal.R.dimen.navigation_bar_width));
+                mContext.getResources().getDimensionPixelSize(
+                        com.android.internal.R.dimen.navigation_bar_width);
 
-        // SystemUI (status bar) layout policy
         int shortSizeDp = shortSize
                 * DisplayMetrics.DENSITY_DEFAULT
                 / DisplayMetrics.DENSITY_DEVICE;
 
-        if (shortSizeDp < 600) {
-            // 0-599dp: "phone" UI with a separate status & navigation bar
-            mHasSystemNavBar = false;
-            mNavigationBarCanMove = true;
-            Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.TABLET_UI, 0);
-        } else if (shortSizeDp < 720) {
-            // 600-719dp: "phone" UI with modifications for larger screens
-            mHasSystemNavBar = false;
-            mNavigationBarCanMove = false;
-            Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.TABLET_UI, 2);
-        } else {
-            // 720dp: "tablet" UI with a single combined status & navigation bar
-            mHasSystemNavBar = true;
-            mNavigationBarCanMove = false;
-            Settings.System.putInt(mContext.getContentResolver(),
-                    Settings.System.TABLET_UI, 1);
-        }
+        // tabletui switch
+        boolean mTabletui = Settings.System.getInt(getApplicationContext().getContentResolver(), MODE_TABLET_UI, 0) != 0;
+        if (!mTabletui) {
 
-        if (!mHasSystemNavBar) {
-        final int showByDefault = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_showNavigationBar) ? 1 : 0;
-        mHasNavigationBar = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.NAVIGATION_BAR_SHOW, showByDefault) == 1;
-        // Allow a system property to override this. Used by the emulator.
-        // See also hasNavigationBar().
-        String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
-        if (! "".equals(navBarOverride)) {
-            if      (navBarOverride.equals("1")) mHasNavigationBar = false;
-            else if (navBarOverride.equals("0")) mHasNavigationBar = true;
-        } else {
-            mHasNavigationBar = false;
-        }
+             // SystemUI (status bar) layout policy
+             if (shortSizeDp < 600) {
+                 // 0-599dp: "phone" UI with a separate status & navigation bar
+                 mHasSystemNavBar = false;
+                 mNavigationBarCanMove = true;
+                 Settings.System.putInt(mContext.getContentResolver(),
+                     Settings.System.MODE_TABLET_UI, 0);
+             } else if (shortSizeDp < 720) {
+                 // 600-719dp: "phone" UI with modifications for larger screens
+                 mHasSystemNavBar = false;
+                 mNavigationBarCanMove = false;
+                 Settings.System.putInt(mContext.getContentResolver(),
+                         Settings.System.MODE_TABLET_UI, 2);
+             } else {
+                 // 720dp: "tablet" UI with a single combined status & navigation bar
+                 mHasSystemNavBar = true;
+                 mNavigationBarCanMove = false;
+                 Settings.System.putInt(mContext.getContentResolver(),
+                         Settings.System.MODE_TABLET_UI, 1);
+             }
+         } else {
+          mHasSystemNavBar = true;
+          mNavigationBarCanMove = false;
+         }
 
-        if (mNavBarFirstBootFlag){
-            mHasNavigationBar = (showByDefault == 1);
-            mNavBarFirstBootFlag = false;
-            // at first boot up, we need to make sure navbar gets created (or obey framework setting).
-            // this should quickly get over-ridden by the settings observer if it was
-            // disabled by the user.
-        }
+         if (!mHasSystemNavBar) {
+             mHasNavigationBar = mContext.getResources().getBoolean(
+                     com.android.internal.R.bool.config_showNavigationBar);
+             // Allow a system property to override this. Used by the emulator.
+             // See also hasNavigationBar().
+             String navBarOverride = SystemProperties.get("qemu.hw.mainkeys");
+             if (! "".equals(navBarOverride)) {
+                 if      (navBarOverride.equals("1")) mHasNavigationBar = false;
+                 else if (navBarOverride.equals("0")) mHasNavigationBar = true;
+             }
+             // Override this by possible System Setting
+             int showNavBar = Settings.System.getInt(mContext.getContentResolver(), Settings.System.NAVIGATION_BAR_SHOW, 0);
+             if (showNavBar == 1 ) {
+                 mHasNavigationBar = true;
+             }
+             if (showNavBar == 0) {
+                 mHasNavigationBar = false;
+             }
+         } else {
+             mHasNavigationBar = false;
+         }
 
-        if (mHasSystemNavBar) {
-            // The system bar is always at the bottom.  If you are watching
-            // a video in landscape, we don't need to hide it if we can still
-            // show a 16:9 aspect ratio with it.
-            int longSizeDp = longSize
-                    * DisplayMetrics.DENSITY_DEFAULT
-                    / DisplayMetrics.DENSITY_DEVICE;
-            int barHeightDp = mNavigationBarHeightForRotation[mLandscapeRotation]
-                    * DisplayMetrics.DENSITY_DEFAULT
-                    / DisplayMetrics.DENSITY_DEVICE;
-            int aspect = ((shortSizeDp-barHeightDp) * 16) / longSizeDp;
-            // We have computed the aspect ratio with the bar height taken
-            // out to be 16:aspect.  If this is less than 9, then hiding
-            // the navigation bar will provide more useful space for wide
-            // screen movies.
-            mCanHideNavigationBar = aspect < 9;
-        } else if (mHasNavigationBar) {
-            // The navigation bar is at the right in landscape; it seems always
-            // useful to hide it for showing a video.
-            mCanHideNavigationBar = true;
-        } else {
-            mCanHideNavigationBar = false;
-        }
+         if (mHasSystemNavBar) {
+             // The system bar is always at the bottom.  If you are watching
+             // a video in landscape, we don't need to hide it if we can still
+             // show a 16:9 aspect ratio with it.
+             int longSizeDp = longSize
+                     * DisplayMetrics.DENSITY_DEFAULT
+                     / DisplayMetrics.DENSITY_DEVICE;
+             int barHeightDp = mNavigationBarHeightForRotation[mLandscapeRotation]
+                     * DisplayMetrics.DENSITY_DEFAULT
+                     / DisplayMetrics.DENSITY_DEVICE;
+             int aspect = ((shortSizeDp-barHeightDp) * 16) / longSizeDp;
+             // We have computed the aspect ratio with the bar height taken
+             // out to be 16:aspect.  If this is less than 9, then hiding
+             // the navigation bar will provide more useful space for wide
+             // screen movies.
+             mCanHideNavigationBar = aspect < 9;
+         } else if (mHasNavigationBar) {
+             // The navigation bar is at the right in landscape; it seems always
+             // useful to hide it for showing a video.
+             mCanHideNavigationBar = true;
+         } else {
+             mCanHideNavigationBar = false;
+         }
 
-        if ("portrait".equals(SystemProperties.get("persist.demo.hdmirotation"))) {
-            mHdmiRotation = mPortraitRotation;
-        } else {
-            mHdmiRotation = mLandscapeRotation;
-        }
-      }
+         if ("portrait".equals(SystemProperties.get("persist.demo.hdmirotation"))) {
+             mHdmiRotation = mPortraitRotation;
+         } else {
+             mHdmiRotation = mLandscapeRotation;
+         }
     }
+
     public void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
         boolean updateRotation = false;
@@ -2114,6 +2105,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     public long interceptKeyBeforeDispatching(WindowState win, KeyEvent event, int policyFlags) {
         final boolean keyguardOn = keyguardOn();
         final int keyCode = event.getKeyCode();
+        final int scanCode = event.getScanCode();
         final int repeatCount = event.getRepeatCount();
         final int metaState = event.getMetaState();
         final int flags = event.getFlags();
@@ -2168,6 +2160,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // it handle it, because that gives us the correct 5 second
         // timeout.
         if (keyCode == KeyEvent.KEYCODE_HOME) {
+            //Ignore the Home key if we disabled it
+            if (scanCode != 0 && Settings.System.getInt(mContext.getContentResolver(), Settings.System.KEY_HOME_ENABLED, 1) == 0) {
+                Log.i(TAG, "Ignoring HOME; Disabled via Settings");
+                return -1;
+            }
 
             // If we have released the home key, and didn't do anything else
             // while it was pressed, then it is time to go home!
@@ -3712,6 +3709,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
         final boolean canceled = event.isCanceled();
         int keyCode = event.getKeyCode();
+        int scanCode = event.getScanCode();
 
         final boolean isInjected = (policyFlags & WindowManagerPolicy.FLAG_INJECTED) != 0;
 
@@ -3727,6 +3725,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (!mSystemBooted) {
             // If we have not yet booted, don't let key events do anything.
             return 0;
+        }
+
+        //Ignore Menu key if it is disabled in Settings
+        if (scanCode != 0 && keyCode == KeyEvent.KEYCODE_MENU) {
+            if (Settings.System.getInt(mContext.getContentResolver(), Settings.System.KEY_MENU_ENABLED, 1) == 0) {
+                Log.i(TAG, "Ignoring Menu Key: Disabled via Settings");
+                return 0;
+            }
+        }
+
+        //Ignore Back key if it is disabled in Settings
+        if (scanCode != 0 && keyCode == KeyEvent.KEYCODE_BACK) {
+            if (Settings.System.getInt(mContext.getContentResolver(), Settings.System.KEY_BACK_ENABLED, 1) == 0) {
+                Log.i(TAG, "Ignoring Menu Key: Disabled via Settings");
+                return 0;
+            }
         }
 
         if (DEBUG_INPUT) {
