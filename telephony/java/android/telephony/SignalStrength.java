@@ -50,6 +50,7 @@ public class SignalStrength implements Parcelable {
     /** @hide */
     public static final int INVALID_SNR = 0x7FFFFFFF;
 
+    /** @hide */
     public static final int SIXBAR_SIGNAL_STRENGTH_NONE_OR_UNKNOWN = 0;
     /** @hide */
     public static final int SIXBAR_SIGNAL_STRENGTH_ONE = 1;
