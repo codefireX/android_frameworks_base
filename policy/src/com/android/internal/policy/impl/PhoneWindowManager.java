@@ -586,8 +586,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     PowerManager.WakeLock mBroadcastWakeLock;
     boolean mHavePendingMediaKeyRepeatWithWakeLock;
 
-    public static final String INTENT_TORCH_ON = "com.android.systemui.INTENT_TORCH_ON";
-    public static final String INTENT_TORCH_OFF = "com.android.systemui.INTENT_TORCH_OFF";
+    public static final String INTENT_TORCH_ON = "net.cactii.flash2.FLASHLIGHT_ON";
+    public static final String INTENT_TORCH_OFF = "net.cactii.flash2.FLASHLIGHT_OFF";
     boolean mFastTorchOn; // local state of torch
     boolean mEnableQuickTorch; // System.Setting
 
