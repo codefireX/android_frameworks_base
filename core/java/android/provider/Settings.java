@@ -3106,15 +3106,7 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
-
-        /**
-         *
-         * Whether to enable torch by long pressing power from a screen off state
-         *
-         * @hide
-         */
-        public static final String ENABLE_FAST_TORCH = "enable_fast_torch";
-   }
+    }
 
     /**
      * Secure system settings, containing system preferences that applications

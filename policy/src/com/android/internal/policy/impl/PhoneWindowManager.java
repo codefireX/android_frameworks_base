@@ -586,11 +586,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     PowerManager.WakeLock mBroadcastWakeLock;
     boolean mHavePendingMediaKeyRepeatWithWakeLock;
 
-    public static final String INTENT_TORCH_ON = "com.android.systemui.INTENT_TORCH_ON";
-    public static final String INTENT_TORCH_OFF = "com.android.systemui.INTENT_TORCH_OFF";
-    boolean mFastTorchOn; // local state of torch
-    boolean mEnableQuickTorch; // System.Setting
-
     // Fallback actions by key code.
     private final SparseArray<KeyCharacterMap.FallbackAction> mFallbackActions =
             new SparseArray<KeyCharacterMap.FallbackAction>();
@@ -650,8 +645,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.VOLBTN_MUSIC_CONTROLS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.ACCELEROMETER_ROTATION), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ENABLE_FAST_TORCH), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.USER_ROTATION), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -821,26 +814,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mPendingPowerKeyUpCanceled = true;
         }
     }
-
-    Runnable mTorchOn = new Runnable() {
-        public void run() {
-            Intent i = new Intent(INTENT_TORCH_ON);
-            i.setAction(INTENT_TORCH_ON);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mContext.startActivity(i);
-            mFastTorchOn = true;
-        };
-    };
-
-    Runnable mTorchOff = new Runnable() {
-        public void run() {
-            Intent i = new Intent(INTENT_TORCH_OFF);
-            i.setAction(INTENT_TORCH_OFF);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mContext.startActivity(i);
-            mFastTorchOn = false;
-        };
-    };
 
     private void interceptScreenshotChord() {
         if (mScreenshotChordEnabled
@@ -1478,9 +1451,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 updateRotation = true;
                 updateOrientationListenerLp();
             }
-
-            mEnableQuickTorch = Settings.System.getInt(resolver, Settings.System.ENABLE_FAST_TORCH,
-                    0) == 1;
 
             mUserRotationAngles = Settings.System.getInt(resolver,
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1);
@@ -3751,9 +3721,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_ENDCALL: {
                 result &= ~ACTION_PASS_TO_USER;
                 if (down) {
-                    if(!isScreenOn && mEnableQuickTorch) {
-                        handleChangeTorchState(true);
-                    }
                     ITelephony telephonyService = getTelephonyService();
                     boolean hungUp = false;
                     if (telephonyService != null) {
@@ -3921,8 +3888,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     interceptPowerKeyDown(!isScreenOn || hungUp
                             || mVolumeDownKeyTriggered || mVolumeUpKeyTriggered);
                 } else {
-		    handleChangeTorchState(false);
-
                     mPowerKeyTriggered = false;
                     cancelPendingScreenshotChordAction();
                     if (interceptPowerKeyUp(canceled || mPendingPowerKeyUpCanceled)) {
@@ -4024,15 +3989,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
         return result;
-    }
-
-    void handleChangeTorchState(boolean on) {
-        if (on) {
-            mHandler.postDelayed(mTorchOn, ViewConfiguration.getLongPressTimeout());
-        } else {
-            mHandler.removeCallbacks(mTorchOn);
-            mHandler.post(mTorchOff);
-        }
     }
 
     void dispatchMediaKeyWithWakeLock(KeyEvent event) {
