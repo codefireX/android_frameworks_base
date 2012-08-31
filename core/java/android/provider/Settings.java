@@ -3127,6 +3127,13 @@ public final class Settings {
          * @hide
          */
         public static final String DUAL_PANE_SETTINGS = "dual_pane_settings";
+
+        /**
+         * Duration in milliseconds a user needs to hold down the back button to kill a process.  The value is integer (milliseconds).
+         *
+         * @hide
+         */
+        public static final String KILL_APP_LONGPRESS_BACK_TIMEOUT = "pref_kill_app_longpress_back_timeout";
     }
 
     /**
