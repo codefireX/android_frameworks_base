@@ -572,8 +572,6 @@ public class PhoneStatusBar extends BaseStatusBar {
             mBrightnessLayout.setVisibility(ViewGroup.GONE);
         }
 
-        mTicker = new MyTicker(context, sb);
-
         TickerView tickerView = (TickerView)mStatusBarView.findViewById(R.id.tickerText);
         tickerView.mTicker = mTicker;
 
