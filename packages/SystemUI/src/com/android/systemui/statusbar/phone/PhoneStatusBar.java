@@ -98,10 +98,12 @@ import com.android.systemui.statusbar.StatusBarIconView;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.DateView;
 import com.android.systemui.statusbar.policy.IntruderAlertView;
+import com.android.systemui.statusbar.policy.BrightnessController;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.OnSizeChangedListener;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
+import com.android.systemui.statusbar.policy.ToggleSlider;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -139,6 +141,9 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     private static final int NOTIFICATION_PRIORITY_MULTIPLIER = 10; // see NotificationManagerService
     private static final int HIDE_ICONS_BELOW_SCORE = Notification.PRIORITY_LOW * NOTIFICATION_PRIORITY_MULTIPLIER;
+    private boolean mAutoBrightness;
+    private boolean mBrightnessToggleslider;
+    private ViewGroup mBrightnessLayout;
 
     // fling gesture tuning parameters, scaled to display density
     private float mSelfExpandVelocityPx; // classic value: 2000px/s
@@ -162,6 +167,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     // These are no longer handled by the policy, because we need custom strategies for them
     BatteryController mBatteryController;
+    BrightnessController mBrightness;
     LocationController mLocationController;
     NetworkController mNetworkController;
 
@@ -295,6 +301,8 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.SCREEN_BRIGHTNESS_MODE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SHOW_BRIGHTNESS_TOGGLESLIDER), false, this);
             update();
         }
 
@@ -310,6 +318,14 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
             mBrightnessControl = !autoBrightness && Settings.System.getInt(
                     resolver, Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1;
+            mBrightnessToggleslider = Settings.System.getInt(resolver,
+                    Settings.System.SHOW_BRIGHTNESS_TOGGLESLIDER, 0) != 0;
+            if (mBrightnessToggleslider) {
+                mBrightnessLayout.setVisibility(ViewGroup.VISIBLE);
+            }
+            else {
+                mBrightnessLayout.setVisibility(ViewGroup.GONE);
+            }
         }
     }
 
@@ -544,6 +560,19 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         mTicker = new MyTicker(context, mStatusBarView);
 
+        mBrightness = new BrightnessController(context,
+                (ToggleSlider)expanded.findViewById(R.id.brightness));
+        mBrightnessLayout = (ViewGroup)expanded.findViewById(R.id.brightness_layout);
+        mBrightnessToggleslider = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.SHOW_BRIGHTNESS_TOGGLESLIDER, 0) != 0;
+        if (mBrightnessToggleslider) {
+            mBrightnessLayout.setVisibility(ViewGroup.VISIBLE);
+        }
+        else {
+            mBrightnessLayout.setVisibility(ViewGroup.GONE);
+        }
+
+        mTicker = new MyTicker(context, sb);
 
         TickerView tickerView = (TickerView)mStatusBarView.findViewById(R.id.tickerText);
         tickerView.mTicker = mTicker;
