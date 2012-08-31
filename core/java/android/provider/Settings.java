@@ -3113,6 +3113,13 @@ public final class Settings {
          * @hide
          */
         public static final String RECENT_KILL_ALL_BUTTON = "recent_kill_all_button";
+
+        /**
+         * Whether to use multipane settings opposed to single pane
+         *
+         * @hide
+         */
+        public static final String DUAL_PANE_SETTINGS = "dual_pane_settings";
     }
 
     /**
