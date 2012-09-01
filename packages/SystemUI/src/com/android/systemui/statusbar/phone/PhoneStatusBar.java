@@ -561,8 +561,8 @@ public class PhoneStatusBar extends BaseStatusBar {
         mTicker = new MyTicker(context, mStatusBarView);
 
         mBrightness = new BrightnessController(context,
-                (ToggleSlider)expanded.findViewById(R.id.brightness));
-        mBrightnessLayout = (ViewGroup)expanded.findViewById(R.id.brightness_layout);
+                (ToggleSlider)mStatusBarWindow.findViewById(R.id.brightness));
+        mBrightnessLayout = (ViewGroup)mStatusBarWindow.findViewById(R.id.brightness_layout);
         mBrightnessToggleslider = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.SHOW_BRIGHTNESS_TOGGLESLIDER, 0) != 0;
         if (mBrightnessToggleslider) {
