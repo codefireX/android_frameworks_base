@@ -2418,7 +2418,40 @@ public final class Settings {
         * @hide
         */
         public static final String COMBINED_BAR_AUTO_HIDE = "combined_bar_auto_hide";
+	/**
+	* Whether to show the battery bar
+	*
+	* @hide
+	*/
+        public static final String STATUSBAR_BATTERY_BAR = "statusbar_battery_bar";
 
+        /**
+	* @hide
+	*/
+        public static final String STATUSBAR_BATTERY_BAR_COLOR = "statusbar_battery_bar_color";
+
+        /**
+	* thickness of the batteyr bar (in dp)
+	*
+	* @hide
+	*/
+        public static final String STATUSBAR_BATTERY_BAR_THICKNESS = "statusbar_battery_bar_thickness";
+
+        /**
+	* 0 = regular
+	* 1 = mirrored from center
+	*
+	* @hide
+	*/
+        public static final String STATUSBAR_BATTERY_BAR_STYLE = "statusbar_battery_bar_style";
+
+        /**
+	* whether to show charging animation
+	*
+	* @hide
+	*/
+        public static final String STATUSBAR_BATTERY_BAR_ANIMATE = "statusbar_battery_bar_animate";
+      
         /**
          * Display style of AM/PM next to clock in status bar
          * 0: Normal display (Eclair stock)
