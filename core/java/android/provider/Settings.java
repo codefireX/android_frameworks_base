@@ -2766,7 +2766,13 @@ public final class Settings {
           * @hide
           */
          public static final String KEY_MENU_ACTION = "key_menu_action";
-
+	 
+	 /**	
+	 * Holds the text for the Carrier Label. An empty string will bring
+         * the default text back.
+	 * @hide
+	 */
+	 public static final String CUSTOM_CARRIER_LABEL = "custom_carrier_label";
          /**
           * Action to perform when the menu key is long-pressed.
           * (Default is 0 on devices with a search key, 3 on devices without)
