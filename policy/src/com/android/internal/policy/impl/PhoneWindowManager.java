@@ -1303,10 +1303,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // 0-599dp: "phone" UI with a separate status & navigation bar
             mHasSystemNavBar = false;
             mNavigationBarCanMove = true;
-        } else if (shortSizeDp < 720) {
+/*        } else if (shortSizeDp < 720) {
             // 600-719dp: "phone" UI with modifications for larger screens
             mHasSystemNavBar = false;
-            mNavigationBarCanMove = false;
+            mNavigationBarCanMove = false; */
         } else {
             // 720dp: "tablet" UI with a single combined status & navigation bar
             mHasSystemNavBar = true;
