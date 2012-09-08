@@ -107,8 +107,6 @@ import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.policy.ToggleSlider;
 
-import com.android.provider.Settings;
-
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -828,7 +826,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         final int height = getStatusBarHeight();
 
         final int transparency = Settings.System.getInt(
-                                        sb.getContext().getContentResolver(),
+                                        mStatusBarWindow.Context().getContentResolver(),
                                         Settings.System.STATUS_BAR_TRANSPARENCY, 0);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
@@ -847,7 +845,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 );
 
         if (transparency != 100) {
-            sb.setBackgroundColor(
+            mStatusBarWindow.setBackgroundColor(
                 (int) (((float)transparency / 100.0F) * 255) * 0x1000000
             );
         }
