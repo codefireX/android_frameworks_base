@@ -826,7 +826,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         final int height = getStatusBarHeight();
 
         final int transparency = Settings.System.getInt(
-                                        mStatusBarWindow.Context().getContentResolver(),
+                                        mStatusBarWindow.getContext().getContentResolver(),
                                         Settings.System.STATUS_BAR_TRANSPARENCY, 0);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
