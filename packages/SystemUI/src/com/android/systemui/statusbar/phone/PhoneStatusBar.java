@@ -107,6 +107,8 @@ import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NotificationRowLayout;
 import com.android.systemui.statusbar.policy.ToggleSlider;
 
+import com.android.provider.Settings;
+
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -825,6 +827,10 @@ public class PhoneStatusBar extends BaseStatusBar {
     private void addIntruderView() {
         final int height = getStatusBarHeight();
 
+        final int transparency = Settings.System.getInt(
+                                        sb.getContext().getContentResolver(),
+                                        Settings.System.STATUS_BAR_TRANSPARENCY, 0);
+
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -835,7 +841,17 @@ public class PhoneStatusBar extends BaseStatusBar {
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
                     | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
-                PixelFormat.TRANSLUCENT);
+
+                (transparency != 100 ? PixelFormat.TRANSPARENT : PixelFormat.TRANSLUCENT)
+
+                );
+
+        if (transparency != 100) {
+            sb.setBackgroundColor(
+                (int) (((float)transparency / 100.0F) * 255) * 0x1000000
+            );
+        }
+
         lp.gravity = Gravity.TOP | Gravity.FILL_HORIZONTAL;
         //lp.y += height * 1.5; // FIXME
         lp.setTitle("IntruderAlert");
