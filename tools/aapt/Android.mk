@@ -30,7 +30,6 @@ LOCAL_SRC_FILES := \
 
 LOCAL_CFLAGS += -Wno-format-y2k
 
-LOCAL_C_INCLUDES += external/expat/lib
 LOCAL_C_INCLUDES += external/libpng
 LOCAL_C_INCLUDES += external/zlib
 LOCAL_C_INCLUDES += build/libs/host/include
