@@ -1305,7 +1305,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 / DisplayMetrics.DENSITY_DEVICE;
 
         // tabletui switch
-        boolean mTabletui = Settings.System.getInt(getApplicationContext().getContentResolver(), MODE_TABLET_UI, 0) != 0;
+        boolean mTabletui = Settings.System.getBoolean(mContext.getContentResolver(), Settings.System.MODE_TABLET_UI, false);
         if (!mTabletui) {
 
              // SystemUI (status bar) layout policy
@@ -1314,19 +1314,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                  mHasSystemNavBar = false;
                  mNavigationBarCanMove = true;
                  Settings.System.putInt(mContext.getContentResolver(),
-                     Settings.System.MODE_TABLET_UI, 0);
+                     Settings.System.TABLET_UI, 0);
              } else if (shortSizeDp < 720) {
                  // 600-719dp: "phone" UI with modifications for larger screens
                  mHasSystemNavBar = false;
                  mNavigationBarCanMove = false;
                  Settings.System.putInt(mContext.getContentResolver(),
-                         Settings.System.MODE_TABLET_UI, 2);
+                         Settings.System.TABLET_UI, 2);
              } else {
                  // 720dp: "tablet" UI with a single combined status & navigation bar
                  mHasSystemNavBar = true;
                  mNavigationBarCanMove = false;
                  Settings.System.putInt(mContext.getContentResolver(),
-                         Settings.System.MODE_TABLET_UI, 1);
+                         Settings.System.TABLET_UI, 1);
              }
          } else {
           mHasSystemNavBar = true;
