@@ -3165,7 +3165,7 @@ public final class Settings {
          *
          * @hide
          */
-        public static final String NAVIGATION_BAR_SHOW = "navigation_bar_show";
+        public static final String NAVIGATION_BAR_SHOW_NOW = "navigation_bar_show";
 
          /**
          * Navigation bar height in portrait
