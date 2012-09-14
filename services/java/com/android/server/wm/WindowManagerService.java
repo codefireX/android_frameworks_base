@@ -94,7 +94,6 @@ import android.os.SystemProperties;
 import android.os.TokenWatcher;
 import android.os.Trace;
 import android.provider.Settings;
-import android.provider.Settings.System;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.FloatMath;
