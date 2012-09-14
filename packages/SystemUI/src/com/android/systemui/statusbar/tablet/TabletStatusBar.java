@@ -991,7 +991,7 @@ public class TabletStatusBar extends BaseStatusBar implements
         View clock = mBarContents.findViewById(R.id.clock);
         View network_text = mBarContents.findViewById(R.id.network_text);
         mShowClock = (Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_CLOCK, 1) == 1);
+                Settings.System.STATUS_BAR_CLOCK_STYLE, 1) == 1);
         if (clock != null) {
             clock.setVisibility(show ? (mShowClock ? View.VISIBLE : View.GONE) : View.GONE);
         }
