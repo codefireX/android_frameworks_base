@@ -6431,7 +6431,7 @@ public class WindowManagerService extends IWindowManager.Stub
         sl = reduceConfigLayout(sl, Surface.ROTATION_180, density, unrotDw, unrotDh);
         sl = reduceConfigLayout(sl, Surface.ROTATION_270, density, unrotDh, unrotDw);
         // TabletUI Switch
-        boolean mTabletui = Settings.System.getBoolean(mContext.getContentResolver(), Settings.System.MODE_TABLET_UI, false);
+        boolean mTabletui = Settings.System.getInt(mContext.getContentResolver(), MODE_TABLET_UI, 0) != 0;
             if (!mTabletui) {
                 outConfig.smallestScreenWidthDp = (int)(mSmallestDisplayWidth / density);
             } else {

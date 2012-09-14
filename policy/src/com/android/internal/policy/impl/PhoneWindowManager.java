@@ -1305,7 +1305,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 / DisplayMetrics.DENSITY_DEVICE;
 
         // TabletUI Switch
-        boolean mTabletui = Settings.System.getInt(getApplicationContext().getContentResolver(), MODE_TABLET_UI, 0) != 0;
+        boolean mTabletui = Settings.System.getInt(mContext.getContentResolver(), MODE_TABLET_UI, 0) != 0;
         if (!mTabletui) {
 
             // SystemUI (status bar) layout policy
