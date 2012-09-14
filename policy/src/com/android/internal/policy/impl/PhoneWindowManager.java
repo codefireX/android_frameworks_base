@@ -64,6 +64,7 @@ import android.os.SystemProperties;
 import android.os.UEventObserver;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.provider.Settings.System;
 
 import com.android.internal.R;
 import com.android.internal.app.ThemeUtils;
@@ -144,6 +145,7 @@ import static android.view.WindowManager.LayoutParams.TYPE_NAVIGATION_BAR_PANEL;
 import static android.view.WindowManager.LayoutParams.TYPE_BOOT_PROGRESS;
 import android.view.WindowManagerImpl;
 import android.view.WindowManagerPolicy;
+import static android.provider.Settings.System.MODE_TABLET_UI;
 import static android.view.WindowManagerPolicy.WindowManagerFuncs.LID_ABSENT;
 import static android.view.WindowManagerPolicy.WindowManagerFuncs.LID_OPEN;
 import static android.view.WindowManagerPolicy.WindowManagerFuncs.LID_CLOSED;
@@ -1303,7 +1305,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 / DisplayMetrics.DENSITY_DEVICE;
 
         // TabletUI Switch
-        boolean mTabletui = Settings.System.getBoolean(mContext.getContentResolver(), Settings.System.MODE_TABLET_UI, false);
+        boolean mTabletui = Settings.System.getInt(getApplicationContext().getContentResolver(), MODE_TABLET_UI, 0) != 0;
         if (!mTabletui) {
 
             // SystemUI (status bar) layout policy
