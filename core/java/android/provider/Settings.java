@@ -2854,6 +2854,16 @@ public final class Settings {
          */
         public static final String SHOW_BRIGHTNESS_TOGGLESLIDER = "show_brightness_toggleslider";
 
+         /**
+         * Which lockscreen style to use. Values are integers
+         * ( 0 - GlowPadView: JB )
+         * ( 1 - MultiwaveView: ICS )
+         * ( 2 - Tabs: GB )
+         * ( 3 - Rotary: Eclair )
+         * @hide
+         */
+        public static final String LOCKSCREEN_STYLE = "lockscreen_style";
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
