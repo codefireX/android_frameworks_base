@@ -3487,6 +3487,26 @@ public final class Settings {
         public static final String SYSTEMUI_SOFTKEY_SCREENOFF = "screenoff";
 
         /**
+         * @hide
+         */
+        public static final String SYSTEMUI_SOFTKEY_IME_SWITCHER = "ime_switcher";
+
+        /**
+         * hide
+         */
+        public static final String SYSTEMUI_SOFTKEY_RING_VIB = "ring_vib";
+
+        /**
+         * hide
+         */
+        public static final String SYSTEMUI_SOFTKEY_RING_SILENT = "ring_silent";
+
+        /**
+         * hide
+         */
+        public static final String SYSTEMUI_SOFTKEY_RING_VIB_SILENT = "ring_vib_silent";
+
+        /**
          * hide
          */
         public static final String SYSTEMUI_SOFTKEY_KILL_PROCESS = "killcurrent";
