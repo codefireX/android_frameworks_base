@@ -71,8 +71,6 @@ import com.android.systemui.statusbar.tablet.StatusBarPanel;
 import com.android.systemui.statusbar.tablet.TabletStatusBar;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -116,6 +114,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private int mRecentItemLayoutId;
     private boolean mFirstScreenful = true;
     private boolean mHighEndGfx;
+
+    private Button mRecentsKillAllButton;
+    private ContentObserver mRecentsKillAllButtonObserver;
 
     public static interface OnRecentsPanelVisibilityChangedListener {
         public void onRecentsPanelVisibilityChanged(boolean visible);
@@ -298,10 +299,9 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             mWaitingToShow = true;
             mWaitingToShowAnimated = animate;
             showIfReady();
-            showMemDisplay(true);
+            showMemDisplay();
         } else {
             show(show, animate, null, false);
-            showMemDisplay(false);
         }
     }
 
@@ -874,6 +874,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
             setContentDescription(null);
         }
+        showMemDisplay();
     }
 
     private void startApplicationDetailsActivity(String packageName) {
@@ -943,7 +944,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         hide(false);
     }
 
-    private boolean showMemDisplay(boolean show) {
+    private boolean showMemDisplay() {
         boolean enableMemDisplay = Settings.System.getInt(mContext.getContentResolver(),
                       Settings.System.SYSTEMUI_RECENTS_MEM_DISPLAY, 0) == 1;
 
@@ -959,27 +960,13 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
         memText.setVisibility(View.VISIBLE);
         memBar.setVisibility(View.VISIBLE);
 
-        if (show) {
-            final int totalMem = getTotalMemory();
-            memBar.setMax(totalMem);
+        int totalMem = getTotalMemory();
+        memBar.setMax(totalMem);
 
-            final Handler handler = new Handler();
-            final Runnable updateMemDisplay = new Runnable() {
-                public void run() {
-                    final int availMem = Integer.parseInt(getAvailMemory());
-                    memText.setText("Free RAM: " + String.valueOf(availMem) + "MB");
-                    memBar.setProgress(totalMem - availMem);
-                }
-            };
-            updateMemDisplayTimer = new Timer();
-            updateMemDisplayTimer.scheduleAtFixedRate(new TimerTask() {
-                public void run() {
-                    handler.post(updateMemDisplay);
-                }
-            }, 0, 2000);
-        } else {
-            updateMemDisplayTimer.cancel();
-        }
+        int availMem = Integer.parseInt(getAvailMemory());
+        memText.setText("Free RAM: " + String.valueOf(availMem) + "MB");
+        memBar.setProgress(totalMem - availMem);
+
         return true;
     }
 
