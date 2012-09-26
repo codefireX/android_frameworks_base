@@ -3274,7 +3274,6 @@ public final class Settings {
          */
         public static final String STATUSBAR_BATTERY_BAR_ANIMATE = "statusbar_battery_bar_animate";
 
-<<<<<<< HEAD
         /**
          * Modify the alpha transparency of the status bar.
          *
@@ -3323,34 +3322,34 @@ public final class Settings {
          * @hide
          */
         public static final String STATUSBAR_WIFI_SIGNAL_TEXT_COLOR = "statusbar_wifi_signal_text_color";
-=======
-		/**
+
+        /**
          * where to show the legacy menu key
          * 0 = right (default)
          * 1 = left
          * 2 = both
-         * 
+         *
          * @hide
          */
         public static final String MENU_LOCATION = "menu_location";
 
         /**
          * Menu visibility style
-         * 
+         *
          * @hide
          */
         public static final String MENU_VISIBILITY = "menu_visibility";
-        
+
         /**
          * Number of custom navbar buttons
          *
          * @hide
          */
         public static final String NAVIGATION_BAR_BUTTONS_QTY = "navigation_bar_buttons_qty";
-        
+
         /**
          * Custom navigation bar intents (short press)
-         * 
+         *
          * @hide
          */
         public static final String[] NAVIGATION_CUSTOM_ACTIVITIES = new String[] {
@@ -3360,10 +3359,10 @@ public final class Settings {
                 "navigation_custom_app_intent_3",
                 "navigation_custom_app_intent_4",
         };
-        
+
         /**
          * Custom navigation bar intents (long press)
-         * 
+         *
          * @hide
          */
         public static final String[] NAVIGATION_LONGPRESS_ACTIVITIES = new String[] {
@@ -3373,7 +3372,7 @@ public final class Settings {
                 "navigation_longpress_app_intent_3",
                 "navigation_longpress_app_intent_4",
         };
-        
+
         /**
          * Drawable URIs, each index needs to be matched up to NAVIGATION_CUSTOM_ACTIVITIES
          *
@@ -3388,7 +3387,6 @@ public final class Settings {
                 "navigation_custom_app_icon_3",
                 "navigation_custom_app_icon_4",
         };
->>>>>>> 288cd6a... Custom NavBar targets (Zaphod-Beeblebrox)
     }
 
     /**
