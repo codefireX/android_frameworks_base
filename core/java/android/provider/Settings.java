@@ -3197,6 +3197,11 @@ public final class Settings {
         public static final String RECENT_KILL_ALL_BUTTON = "recent_kill_all_button";
 
         /**
+         * @hide
+         */
+        public static final String SYSTEMUI_RECENTS_MEM_DISPLAY = "interface_recents_mem_display";
+
+        /**
          * Whether the UI is initiated in tablet UI (false = phone UI)
          * @hide
          *  0 = Phone UI
