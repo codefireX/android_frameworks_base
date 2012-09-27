@@ -945,7 +945,7 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
 
     private boolean showMemDisplay(boolean show) {
         boolean enableMemDisplay = Settings.System.getInt(mContext.getContentResolver(),
-                EOSConstants.SYSTEMUI_RECENTS_MEM_DISPLAY, 0) == 1;
+                      Settings.System.SYSTEMUI_RECENTS_MEM_DISPLAY, 0) == 1;
 
         final TextView memText = (TextView) findViewById(R.id.recents_memory_text);
         final ProgressBar memBar = (ProgressBar) findViewById(R.id.recents_memory_bar);
