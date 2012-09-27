@@ -428,5 +428,6 @@
 
     <!-- Codefire Additions -->
     <string name="recents_kill_all_button_text">Kill all</string>
+    <string name="app_killed_message">App killed</string>
 
 </resources>
