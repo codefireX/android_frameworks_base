@@ -28,8 +28,6 @@ import android.util.Log;
 import android.view.IWindowManager;
 import android.view.Surface;
 
-import org.teameos.jellybean.settings.EOSConstants;
-
 /**
  * Provides helper functions for configuring the display rotation policy.
  */
@@ -147,7 +145,7 @@ public final class RotationPolicy {
                 Settings.System.HIDE_ROTATION_LOCK_TOGGLE_FOR_ACCESSIBILITY),
                 false, listener.mObserver);
         context.getContentResolver().registerContentObserver(Settings.System.getUriFor(
-                EOSConstants.SYSTEMUI_INTERFACE_ROTATIONLOCK_TOGGLE),
+                Settings.System.SYSTEMUI_INTERFACE_ROTATIONLOCK_TOGGLE),
                 false, listener.mObserver);
     }
 
