@@ -1738,14 +1738,16 @@ public class TabletStatusBar extends BaseStatusBar implements
                     if (reason != null && reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
                         flags |= CommandQueue.FLAG_EXCLUDE_RECENTS_PANEL;
                     }
-                }
-                if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                  // codefireX: comment out the following to fix a systemUI FC
+                  // from a quick screen off and on.
+//                }
+//                if (Intent.ACTION_SCREEN_OFF.equals(action)) {
                     // If we're turning the screen off, we want to hide the
                     // recents panel with no animation
                     // TODO: hide other things, like the notification tray,
                     // with no animation as well
-                    mRecentsPanel.show(false, false);
-                    flags |= CommandQueue.FLAG_EXCLUDE_RECENTS_PANEL;
+//                    mRecentsPanel.show(false, false);
+//                    flags |= CommandQueue.FLAG_EXCLUDE_RECENTS_PANEL;
                 }
                 animateCollapse(flags);
             }
