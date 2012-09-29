@@ -705,6 +705,7 @@ public class NavigationBarView extends LinearLayout {
                  ? findViewById(R.id.rot90)
                  : findViewById(R.id.rot270);
 
+<<<<<<< HEAD
          for (View v : mRotatedViews) {
              // this helps avoid drawing artifacts with glowing navigation keys
              ViewGroup group = (ViewGroup) v.findViewById(R.id.nav_buttons);
@@ -934,6 +935,57 @@ public class NavigationBarView extends LinearLayout {
             default:
                 return "VISIBLE";
         }
+    }
+
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        pw.println("NavigationBarView {");
+        final Rect r = new Rect();
+
+        pw.println(String.format("      this: " + PhoneStatusBar.viewInfo(this)
+                        + " " + visibilityToString(getVisibility())));
+
+        getWindowVisibleDisplayFrame(r);
+        final boolean offscreen = r.right > mDisplay.getRawWidth()
+            || r.bottom > mDisplay.getRawHeight();
+        pw.println("      window: "
+                + r.toShortString()
+                + " " + visibilityToString(getWindowVisibility())
+                + (offscreen ? " OFFSCREEN!" : ""));
+
+        pw.println(String.format("      mCurrentView: id=%s (%dx%d) %s",
+                        getResourceName(mCurrentView.getId()),
+                        mCurrentView.getWidth(), mCurrentView.getHeight(),
+                        visibilityToString(mCurrentView.getVisibility())));
+
+        pw.println(String.format("      disabled=0x%08x vertical=%s hidden=%s low=%s menu=%s",
+                        mDisabledFlags,
+                        mVertical ? "true" : "false",
+                        mHidden ? "true" : "false",
+                        mLowProfile ? "true" : "false",
+                        mShowMenu ? "true" : "false"));
+
+        final View back = getBackButton();
+        final View home = getHomeButton();
+        final View recent = getRecentsButton();
+        final View menu = getMenuButton();
+
+        pw.println("      back: "
+                + PhoneStatusBar.viewInfo(back)
+                + " " + visibilityToString(back.getVisibility())
+                );
+        pw.println("      home: "
+                + PhoneStatusBar.viewInfo(home)
+                + " " + visibilityToString(home.getVisibility())
+                );
+        pw.println("      rcnt: "
+                + PhoneStatusBar.viewInfo(recent)
+                + " " + visibilityToString(recent.getVisibility())
+                );
+        pw.println("      menu: "
+                + PhoneStatusBar.viewInfo(menu)
+                + " " + visibilityToString(menu.getVisibility())
+                );
+        pw.println("    }");
     }
 
     private void updateColor() {
