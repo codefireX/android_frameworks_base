@@ -16,11 +16,20 @@
 
 package com.android.systemui.statusbar.phone;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -38,13 +47,15 @@ public class PhoneStatusBarView extends FrameLayout {
     private static final String TAG = "PhoneStatusBarView";
 
     static final int DIM_ANIM_TIME = 400;
-    
+
+    private Context mContext;
+
     PhoneStatusBar mService;
     boolean mTracking;
     int mStartX, mStartY;
     ViewGroup mNotificationIcons;
     ViewGroup mStatusIcons;
-    
+
     boolean mNightMode = false;
     int mStartAlpha = 0, mEndAlpha = 0;
     long mEndTime = 0;
@@ -54,6 +65,16 @@ public class PhoneStatusBarView extends FrameLayout {
 
     public PhoneStatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.SYSTEMUI_STATUSBAR_COLOR), false,
+                new ContentObserver(new Handler()) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        updateColor();
+                    }
+                });
     }
 
     @Override
@@ -61,6 +82,9 @@ public class PhoneStatusBarView extends FrameLayout {
         super.onFinishInflate();
         mNotificationIcons = (ViewGroup)findViewById(R.id.notificationIcons);
         mStatusIcons = (ViewGroup)findViewById(R.id.statusIcons);
+
+        // let's update status bar color here
+        updateColor();
     }
 
     @Override
@@ -68,7 +92,7 @@ public class PhoneStatusBarView extends FrameLayout {
         super.onAttachedToWindow();
         //mService.onBarViewAttached();
     }
-    
+
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -182,5 +206,16 @@ public class PhoneStatusBarView extends FrameLayout {
             return true;
         }
         return false;
+    }
+
+    private void updateColor() {
+        int color = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SYSTEMUI_STATUSBAR_COLOR,
+                Settings.System.SYSTEMUI_STATUSBAR_COLOR_DEF);
+        if (color == -1)
+            color = Settings.System.SYSTEMUI_STATUSBAR_COLOR_DEF;
+        // let's not _yet_ support alpha here
+        color = Color.rgb(Color.red(color), Color.green(color), Color.blue(color));
+        this.setBackgroundColor(color);
     }
 }

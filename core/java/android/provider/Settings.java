@@ -3459,6 +3459,18 @@ public final class Settings {
         public static final int SYSTEMUI_NAVBAR_COLOR_DEF = 0xFF000000;
 
         /**
+         *
+         * @hide
+         */
+        public static final String SYSTEMUI_STATUSBAR_COLOR = "systemui_statusbar_color";
+
+        /**
+         *
+         * @hide
+         */
+        public static final int SYSTEMUI_STATUSBAR_COLOR_DEF = 0xFF000000;
+
+        /**
          * @hide
          */
         public static final String SYSTEMUI_NAVRING_1 = "systemui_navring_1";
