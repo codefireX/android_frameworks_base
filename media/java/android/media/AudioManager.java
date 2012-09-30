@@ -40,8 +40,6 @@ import android.view.Surface;
 import android.view.VolumePanel;
 import android.view.WindowManager;
 
-import org.teameos.jellybean.settings.EOSConstants;
-
 import java.util.HashMap;
 
 /**
@@ -467,8 +465,8 @@ public class AudioManager {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 if (Settings.System.getInt(mContext.getContentResolver(),
-                        EOSConstants.SYSTEM_VOLUME_KEYS_SWITCH_ON_ROTATION,
-                        EOSConstants.SYSTEM_VOLUME_KEYS_SWITCH_ON_ROTATION_DEF) == 1) {
+                        Settings.System.SYSTEM_VOLUME_KEYS_SWITCH_ON_ROTATION,
+                        Settings.System.SYSTEM_VOLUME_KEYS_SWITCH_ON_ROTATION_DEF) == 1) {
                     int rotation = ((WindowManager) mContext
                             .getSystemService(Context.WINDOW_SERVICE))
                             .getDefaultDisplay().getRotation();

@@ -3471,6 +3471,18 @@ public final class Settings {
         public static final int SYSTEMUI_STATUSBAR_COLOR_DEF = 0xFF000000;
 
         /**
+         *
+         * @hide
+         */
+        public static final String SYSTEM_VOLUME_KEYS_SWITCH_ON_ROTATION = "system_volume_keys_switch_on_rotation";
+
+        /**
+         *
+         * @hide
+         */
+        public static final int SYSTEM_VOLUME_KEYS_SWITCH_ON_ROTATION_DEF = 1;
+
+        /**
          * @hide
          */
         public static final String SYSTEMUI_NAVRING_1 = "systemui_navring_1";
