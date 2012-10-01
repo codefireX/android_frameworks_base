@@ -3566,14 +3566,6 @@ public final class Settings {
          * @hide
          */
         public static final int SYSTEMUI_NAVRING_OVERRIDE_HOME_DEF = 0;
-
-        /**
-         * use Alt Activity Resolver Grid (GB style)
-         * boolean
-         *
-         * @hide
-         */
-        public static final String ACTIVITY_RESOLVER_USE_ALT = "activity_resolver_use_alt";
     }
 
     /**
