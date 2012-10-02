@@ -102,7 +102,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     boolean mHideRecentsAfterThumbnailScaleUpStarted;
 
     private Button mRecentsKillAllButton;
-    private Timer updateMemDisplayTimer;
 
     private RecentTasksLoader mRecentTasksLoader;
     private ArrayList<TaskDescription> mRecentTaskDescriptions;
@@ -114,9 +113,6 @@ public class RecentsPanelView extends FrameLayout implements OnItemClickListener
     private int mRecentItemLayoutId;
     private boolean mFirstScreenful = true;
     private boolean mHighEndGfx;
-
-    private Button mRecentsKillAllButton;
-    private ContentObserver mRecentsKillAllButtonObserver;
 
     public static interface OnRecentsPanelVisibilityChangedListener {
         public void onRecentsPanelVisibilityChanged(boolean visible);
