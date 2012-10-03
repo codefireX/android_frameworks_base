@@ -3349,6 +3349,11 @@ public final class Settings {
         public static final String STATUSBAR_WIFI_SIGNAL_TEXT_COLOR = "statusbar_wifi_signal_text_color";
 
         /**
+         * @hide
+         */
+        public static final String SYSTEMUI_SCREENSHOT_SCALE_INDEX = "screenshot_index";
+
+        /**
          * where to show the legacy menu key
          * 0 = right (default)
          * 1 = left

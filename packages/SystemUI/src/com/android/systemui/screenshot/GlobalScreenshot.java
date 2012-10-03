@@ -45,6 +45,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Process;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -91,6 +92,7 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
     private String mImageFilePath;
     private long mImageTime;
     private BigPictureStyle mNotificationStyle;
+    private Float[] mScaleValues = {1.0f, 0.75f, 0.50f, 0.25f};
 
     // WORKAROUND: We want the same notification across screenshots that we update so that we don't
     // spam a user's notification drawer.  However, we only show the ticker for the saving state
@@ -171,6 +173,15 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
         Context context = params[0].context;
         Bitmap image = params[0].image;
         Resources r = context.getResources();
+
+        int scaleIndex = Settings.System.getInt(context.getContentResolver(),
+                Settings.System.SYSTEMUI_SCREENSHOT_SCALE_INDEX, 0);
+        // only scale if not at full size image as determined by index value
+        if (scaleIndex != 0) {
+            int newWidth = Math.round(image.getWidth() * mScaleValues[scaleIndex]);
+            int newHeight = Math.round(image.getHeight() * mScaleValues[scaleIndex]);
+            image = Bitmap.createScaledBitmap(image, newWidth, newHeight, true);
+        }
 
         try {
             // Save the screenshot to the MediaStore
