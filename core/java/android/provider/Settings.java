@@ -3579,7 +3579,7 @@ public final class Settings {
          *
          * @hide
          */
-        public static final String ACTIVITY_RESOLVER_USE_ALT_DEF = 1;
+        public static final int ACTIVITY_RESOLVER_USE_ALT_DEF = 1;
     }
 
     /**

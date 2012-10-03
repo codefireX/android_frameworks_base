@@ -117,8 +117,8 @@ public class ResolverActivity extends AlertActivity implements AdapterView.OnIte
         } catch (RemoteException e) {
             mLaunchedFromUid = -1;
         }
-        mUseAltGrid = Settings.System.getInt(mContext.getContentResolver(), Settings.System.ACTIVITY_RESOLVER_USE_ALT,
-                      Settings.System.ACTIVITY_RESOLVER_USE_ALT) == 1)
+        mUseAltGrid = Settings.System.getInt(context.getContentResolver(), Settings.System.ACTIVITY_RESOLVER_USE_ALT,
+                      Settings.System.ACTIVITY_RESOLVER_USE_ALT) == 1;
         mPm = getPackageManager();
         mAlwaysUseOption = alwaysUseOption;
         mMaxColumns = getResources().getInteger(R.integer.config_maxResolverActivityColumns);
