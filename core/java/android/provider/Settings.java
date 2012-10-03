@@ -3569,11 +3569,17 @@ public final class Settings {
 
         /**
          * use Alt Activity Resolver Grid (GB style)
-         * boolean
          *
          * @hide
          */
         public static final String ACTIVITY_RESOLVER_USE_ALT = "activity_resolver_use_alt";
+
+        /**
+         * use Alt Activity Resolver Grid (GB style) default
+         *
+         * @hide
+         */
+        public static final String ACTIVITY_RESOLVER_USE_ALT_DEF = 1;
     }
 
     /**
