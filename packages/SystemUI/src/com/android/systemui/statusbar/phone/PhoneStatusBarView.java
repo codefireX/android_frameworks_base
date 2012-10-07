@@ -119,7 +119,7 @@ public class PhoneStatusBarView extends FrameLayout {
         return mEndAlpha
                 - (int)(((mEndAlpha-mStartAlpha) * (mEndTime-time) / DIM_ANIM_TIME));
     }
-   
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -217,8 +217,7 @@ public class PhoneStatusBarView extends FrameLayout {
                 Settings.System.SYSTEMUI_STATUSBAR_COLOR_DEF);
         if (color == -1)
             color = Settings.System.SYSTEMUI_STATUSBAR_COLOR_DEF;
-        // let's not _yet_ support alpha here
-        color = Color.rgb(Color.red(color), Color.green(color), Color.blue(color));
+        color = Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
         this.setBackgroundColor(color);
     }
 }
