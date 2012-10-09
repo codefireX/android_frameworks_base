@@ -111,7 +111,7 @@
                 systemui:rowHeight="@dimen/notification_row_min_height"
                 />
         </ScrollView>
-    </LinearLayout>
+    </FrameLayout>
 
     <com.android.systemui.statusbar.phone.CloseDragHandle android:id="@+id/close"
         android:layout_width="match_parent"
