@@ -52,6 +52,24 @@
             android:layout_height="@dimen/notification_panel_header_height"
             />
 
+        <TextView
+            android:textAppearance="@style/TextAppearance.StatusBar.Date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:paddingTop="4dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_vertical|left"
+            android:text="@string/brightness_label"
+            android:visibility="gone" />
+        <com.android.systemui.statusbar.policy.ToggleSlider
+            android:id="@+id/brightness"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="2dp"
+            systemui:text="@string/status_bar_settings_auto_brightness_label" />
+
         <com.android.systemui.statusbar.powerwidget.PowerWidget
             android:id="@+id/exp_power_stat"
             android:layout_width="match_parent"
