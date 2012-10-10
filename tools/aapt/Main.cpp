@@ -71,6 +71,7 @@ void usage(void)
         "        [-F apk-file] [-J R-file-dir] \\\n"
         "        [--product product1,product2,...] \\\n"
         "        [-c CONFIGS] [--preferred-configurations CONFIGS] \\\n"
+        "        [-o] \\\n"
         "        [raw-files-dir [raw-files-dir] ...] \\\n"
         "        [--output-text-symbols DIR]\n"
         "\n"
