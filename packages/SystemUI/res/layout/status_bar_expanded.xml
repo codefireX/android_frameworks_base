@@ -83,7 +83,6 @@
             android:id="@+id/exp_power_stat"
             android:layout_width="match_parent"
             android:layout_height="@dimen/notification_panel_widget_height"
-            android:layout_marginTop="44dip"
         />
 
         <TextView
@@ -101,8 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fadingEdge="none"
-            android:overScrollMode="ifContentScrolls"
-            android:layout_marginTop="@dimen/notification_panel_header_and_widget"
+            android:overScrollMode="always"
             >
             <com.android.systemui.statusbar.policy.NotificationRowLayout
                 android:id="@+id/latestItems"
