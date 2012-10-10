@@ -41,33 +41,6 @@
         />
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:orientation="vertical"
-        android:background="@drawable/notification_header_bg"
-        android:id="@+id/brightness_layout">
-
-        <TextView
-            android:textAppearance="@style/TextAppearance.StatusBar.Date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:paddingTop="4dp"
-            android:paddingLeft="10dp"
-            android:gravity="center_vertical|left"
-            android:text="@string/brightness_label"
-            android:visibility="gone" />
-        <com.android.systemui.statusbar.policy.ToggleSlider
-            android:id="@+id/brightness"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="2dp"
-            systemui:text="@string/status_bar_settings_auto_brightness_label" />
-    </LinearLayout>
-    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/close_handle_underlap"
@@ -109,7 +82,7 @@
                 systemui:rowHeight="@dimen/notification_row_min_height"
                 />
         </ScrollView>
-    </FrameLayout>
+    </LinearLayout>
 
     <com.android.systemui.statusbar.phone.CloseDragHandle android:id="@+id/close"
         android:layout_width="match_parent"
