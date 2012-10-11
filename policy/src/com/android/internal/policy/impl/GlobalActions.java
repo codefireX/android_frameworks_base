@@ -197,7 +197,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         }
 
         mEnableNavBarHideToggle= Settings.System.getBoolean(mContext.getContentResolver(),
-                Settings.System.POWER_DIALOG_SHOW_NAVBAR_HIDE, false);
+                Settings.System.POWER_DIALOG_SHOW_NAVBAR_HIDE, true);
         mNavBarHideToggle = new NavBarAction(mHandler);
 
         mAirplaneModeOn = new ToggleAction(
