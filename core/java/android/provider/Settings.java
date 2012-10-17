@@ -3309,7 +3309,7 @@ public final class Settings {
 
         /**
          * Modify the alpha transparency of the status bar.
-         *
+         * From 0% to 100%
          * @hide
          */
         public static final String STATUS_BAR_TRANSPARENCY = "status_bar_transparency";
