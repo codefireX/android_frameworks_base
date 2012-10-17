@@ -313,6 +313,8 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.EXPANDED_VIEW_WIDGET), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_TRANSPARENCY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NAV_BAR_TRANSPARENCY), false, this);
             update();
         }
 
@@ -324,6 +326,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
             setStatusBarParams(mStatusBarView);
+            setNavigationBarParams();
             boolean autoBrightness = Settings.System.getInt(
                     resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, 0) ==
                     Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
@@ -803,8 +806,8 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     private void prepareNavigationBarView() {
         mNavigationBarView.reorient();
-        
-        if (mNavigationBarView.getRecentsButton() != null){ 
+
+        if (mNavigationBarView.getRecentsButton() != null){
         	mNavigationBarView.getRecentsButton().setOnClickListener(mRecentsClickListener);
         	mNavigationBarView.getRecentsButton().setOnTouchListener(mRecentsPanel);
         }
@@ -812,6 +815,12 @@ public class PhoneStatusBar extends BaseStatusBar {
         		mNavigationBarView.getHomeButton().setOnTouchListener(mHomeSearchActionListener);
         }
         updateSearchPanel();
+    }
+
+    protected void setNavigationBarParams(){
+        int opacity = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.NAV_BAR_TRANSPARENCY, 100);
+        mNavigationBarView.getBackground().setAlpha(Math.round((opacity * 255) / 100));
     }
 
     // For small-screen devices (read: phones) that lack hardware navigation buttons
@@ -2652,6 +2661,7 @@ public class PhoneStatusBar extends BaseStatusBar {
                 // we're screwed here fellas
             }
             setStatusBarParams(mStatusBarView);
+            setNavigationBarParams();
         } else {
 
             if (mClearButton instanceof TextView) {
