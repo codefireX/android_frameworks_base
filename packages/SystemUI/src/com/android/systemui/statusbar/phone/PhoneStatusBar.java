@@ -149,6 +149,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     private static final int HIDE_ICONS_BELOW_SCORE = Notification.PRIORITY_LOW * NOTIFICATION_PRIORITY_MULTIPLIER;
     private boolean mAutoBrightness;
     private boolean mBrightnessToggleslider;
+    private boolean mHasNavBar;
     private ViewGroup mBrightnessLayout;
 
     // fling gesture tuning parameters, scaled to display density
@@ -326,8 +327,14 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
-            setStatusBarParams(mStatusBarView);
-            setNavigationBarParams();
+            mHasNavBar = Settings.System.getInt(resolver,
+                    Settings.System.NAVIGATION_BAR_SHOW, 0) != 0;
+            if (mHasNavBar) {
+                setStatusBarParams(mStatusBarView);
+                setNavigationBarParams();
+            } else {
+                setStatusBarParams(mStatusBarView);
+            }
             boolean autoBrightness = Settings.System.getInt(
                     resolver, Settings.System.SCREEN_BRIGHTNESS_MODE, 0) ==
                     Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
@@ -2661,8 +2668,12 @@ public class PhoneStatusBar extends BaseStatusBar {
             } catch (IOException e) {
                 // we're screwed here fellas
             }
-            setStatusBarParams(mStatusBarView);
-            setNavigationBarParams();
+            if (mHasNavBar) {
+                setStatusBarParams(mStatusBarView);
+                setNavigationBarParams();
+            } else {
+                setStatusBarParams(mStatusBarView);
+            }
         } else {
 
             if (mClearButton instanceof TextView) {
