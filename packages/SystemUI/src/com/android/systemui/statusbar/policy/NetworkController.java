@@ -834,7 +834,7 @@ public class NetworkController extends BroadcastReceiver {
 
     private void updateWifiIcons() {
         if (mWifiConnected) {
-            if (useSixBar)
+            if (useSixBar) {
                 mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH_6BAR[mInetCondition][mWifiLevel];
             } else {
                 mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH[mInetCondition][mWifiLevel];
