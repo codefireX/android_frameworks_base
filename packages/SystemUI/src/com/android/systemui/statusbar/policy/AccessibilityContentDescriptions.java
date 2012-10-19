@@ -36,6 +36,8 @@ public class AccessibilityContentDescriptions {
         R.string.accessibility_wifi_one_bar,
         R.string.accessibility_wifi_two_bars,
         R.string.accessibility_wifi_three_bars,
+        R.string.accessibility_wifi_four_bars,
+        R.string.accessibility_wifi_five_bars,
         R.string.accessibility_wifi_signal_full
     };
     static final int[] WIMAX_CONNECTION_STRENGTH = {

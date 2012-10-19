@@ -834,14 +834,22 @@ public class NetworkController extends BroadcastReceiver {
 
     private void updateWifiIcons() {
         if (mWifiConnected) {
-            mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH[mInetCondition][mWifiLevel];
+            if (useSixBar)
+                mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH_6BAR[mInetCondition][mWifiLevel];
+            } else {
+                mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH[mInetCondition][mWifiLevel];
+            }
             mContentDescriptionWifi = mContext.getString(
                     AccessibilityContentDescriptions.WIFI_CONNECTION_STRENGTH[mWifiLevel]);
         } else {
             if (mDataAndWifiStacked) {
                 mWifiIconId = 0;
             } else {
-                mWifiIconId = mWifiEnabled ? R.drawable.stat_sys_wifi_signal_null : 0;
+                if (useSixBar) {
+                    mWifiIconId = mWifiEnabled ? R.drawable.stat_sys_wifi_signal_null_6bar : 0;
+                } else {
+                    mWifiIconId = mWifiEnabled ? R.drawable.stat_sys_wifi_signal_null : 0;
+                }
             }
             mContentDescriptionWifi = mContext.getString(R.string.accessibility_no_wifi);
         }
