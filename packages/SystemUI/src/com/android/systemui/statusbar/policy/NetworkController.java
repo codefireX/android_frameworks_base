@@ -833,6 +833,9 @@ public class NetworkController extends BroadcastReceiver {
     }
 
     private void updateWifiIcons() {
+        boolean useSixBar = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUSBAR_6BAR_SIGNAL, 1) == 1);
+
         if (mWifiConnected) {
             if (useSixBar) {
                 mWifiIconId = WifiIcons.WIFI_SIGNAL_STRENGTH_6BAR[mInetCondition][mWifiLevel];
