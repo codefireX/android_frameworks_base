@@ -37,12 +37,16 @@ class WifiIcons {
               R.drawable.stat_sys_wifi_signal_1_6bar,
               R.drawable.stat_sys_wifi_signal_2_6bar,
               R.drawable.stat_sys_wifi_signal_3_6bar,
-              R.drawable.stat_sys_wifi_signal_4_6bar },
+              R.drawable.stat_sys_wifi_signal_4_6bar,
+              R.drawable.stat_sys_wifi_signal_5_6bar,
+              R.drawable.stat_sys_wifi_signal_6_6bar },
             { R.drawable.stat_sys_wifi_signal_0_6bar,
               R.drawable.stat_sys_wifi_signal_1_fully_6bar,
               R.drawable.stat_sys_wifi_signal_2_fully_6bar,
               R.drawable.stat_sys_wifi_signal_3_fully_6bar,
-              R.drawable.stat_sys_wifi_signal_4_fully_6bar }
+              R.drawable.stat_sys_wifi_signal_4_fully_6bar,
+              R.drawable.stat_sys_wifi_signal_5_fully_6bar,
+              R.drawable.stat_sys_wifi_signal_6_fully_6bar }
         };
 
     static final int WIFI_LEVEL_COUNT = WIFI_SIGNAL_STRENGTH[0].length;
