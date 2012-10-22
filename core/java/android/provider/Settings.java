@@ -3439,6 +3439,11 @@ public final class Settings {
         };
 
         /**
+         * Widgets to show. Should be separated by |
+         */
+        public static final String NAVIGATION_BAR_WIDGETS = "navigation_bar_widgets";
+
+        /**
          * @hide
          */
         public static final String NAVIGATION_BAR_TINT = "navigation_bar_tint";
