@@ -54,9 +54,7 @@ public class CreateShortcut extends LauncherActivity {
   private int getProperShortcutIcon(String className) {
     String c = className.substring(className.lastIndexOf(".") + 1);
 
-    if (c.equals("Torch")) {
-      return R.drawable.toggle_torch;
-    } else if (c.equals ("NavbarToggle")) {
+    if (c.equals ("NavbarToggle")) {
         return R.drawable.toggle_navbar;
     } else if (c.equals ("WidgetToggle")) {
         return R.drawable.ic_sysbar_widget;
