@@ -214,7 +214,7 @@ public class NotificationPanel extends RelativeLayout implements StatusBarPanel,
         // I think this is better than registering yet another observer
         if (vis == View.VISIBLE) {
             boolean mBigClearButton = Settings.System.getInt(mContext.getContentResolver(),
-                    EOSConstants.SYSTEMUI_TABLET_BIG_CLEAR_BUTTON, 0) == 1 ? true : false;
+                    Settings.System.SYSTEMUI_TABLET_BIG_CLEAR_BUTTON, 0) == 1 ? true : false;
             mClearButton.setImageDrawable(mBigClearButton ? mBigButton : mStockButton);
         }
         // when we hide, put back the notifications
