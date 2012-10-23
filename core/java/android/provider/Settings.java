@@ -3608,7 +3608,7 @@ public final class Settings {
         /**
          * @hide
          */
-        public static final String SYSTEMUI_BIG_CLEAR_BUTTON = "interface_big_clear_button";
+        public static final String SYSTEMUI_TABLET_BIG_CLEAR_BUTTON = "interface_big_clear_button";
     }
 
     /**
