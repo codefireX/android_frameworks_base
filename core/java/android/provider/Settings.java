@@ -3604,6 +3604,11 @@ public final class Settings {
          * @hide
          */
         public static final int SYSTEMUI_NAVRING_OVERRIDE_HOME_DEF = 0;
+
+        /**
+         * @hide
+         */
+        public static final String SYSTEMUI_BIG_CLEAR_BUTTON = "interface_big_clear_button";
     }
 
     /**
