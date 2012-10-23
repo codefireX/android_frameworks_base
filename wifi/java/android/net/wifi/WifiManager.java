@@ -18,7 +18,6 @@ package android.net.wifi;
 
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.net.DhcpInfo;
 import android.os.Binder;
@@ -29,9 +28,6 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.os.WorkSource;
 import android.os.Messenger;
-import android.provider.Settings;
-import android.util.Log;
-import android.util.Slog;
 import android.util.SparseArray;
 
 import com.android.internal.util.AsyncChannel;
@@ -61,8 +57,6 @@ import java.util.List;
  * level, use {@link android.net.ConnectivityManager}.
  */
 public class WifiManager {
-    boolean useSixBar = (Settings.System.getInt(mContext.getContentResolver(),
-            Settings.System.STATUSBAR_6BAR_SIGNAL, 1) == 1);
 
     // Supplicant error codes:
     /**
@@ -450,11 +444,7 @@ public class WifiManager {
      * {@link #RSSI_CHANGED_ACTION} broadcast
      * @hide
      */
-    if (useSixBar) {
-        public static final int RSSI_LEVELS = 7;
-    } else {
-        public static final int RSSI_LEVELS = 5;
-    }
+    public static final int RSSI_LEVELS = 5;
 
     /**
      * Auto settings in the driver. The driver could choose to operate on both
