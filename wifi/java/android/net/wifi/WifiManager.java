@@ -444,7 +444,7 @@ public class WifiManager {
      * {@link #RSSI_CHANGED_ACTION} broadcast
      * @hide
      */
-    public static final int RSSI_LEVELS = 7;
+    public static final int RSSI_LEVELS = 5;
 
     /**
      * Auto settings in the driver. The driver could choose to operate on both
