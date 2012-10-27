@@ -721,10 +721,14 @@ public class PhoneStatusBar extends BaseStatusBar {
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         context.registerReceiver(mBroadcastReceiver, filter);
 
-        if (mShortClick == "") {
+        SettingsObserver observer = new SettingsObserver(new Handler());
+        observer.observe();
+        updateSettings();
+
+        if (mShortClick == null || mShortClick == "") {
             mShortClick = "**alarm**";
         }
-        if (mLongClick == "") {
+        if (mLongClick == null || mLongClick == "") {
             mLongClick = "**assist**";
         }
 

@@ -128,10 +128,10 @@ public class Clock extends TextView implements OnClickListener, OnLongClickListe
             SettingsObserver settingsObserver = new SettingsObserver(new Handler());
             settingsObserver.observe();
             updateSettings();
-            if (mShortClick == "") {
+            if (mShortClick == null || mShortClick == "") {
                 mShortClick = "**alarm**";
             }
-            if (mLongClick == "") {
+            if (mLongClick == null || mLongClick == "") {
                 mLongClick = "**assist**";
             }
         }
