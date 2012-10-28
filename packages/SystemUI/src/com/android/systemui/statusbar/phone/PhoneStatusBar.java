@@ -242,6 +242,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     final static String ACTION_ALARM = "**alarm**";
     final static String ACTION_TODAY = "**today**";
     final static String ACTION_VOICEASSIST = "**assist**";
+    final static String ACTION_NOTHING = "**nothing**";
 
     private Intent intent;
     private String mShortClick;
@@ -726,10 +727,10 @@ public class PhoneStatusBar extends BaseStatusBar {
         updateSettings();
 
         if (mShortClick == null || mShortClick == "") {
-            mShortClick = "**alarm**";
+            mShortClick = "**nothing**";
         }
         if (mLongClick == null || mLongClick == "") {
-            mLongClick = "**assist**";
+            mLongClick = "**nothing**";
         }
 
         //check for view when not pressed on settings button
@@ -2555,6 +2556,9 @@ public class PhoneStatusBar extends BaseStatusBar {
 
    private View.OnClickListener mDateViewListener = new View.OnClickListener() {
         public void onClick(View v) {
+        if (mLongClick.equals(ACTION_NOTHING)) {
+            // Do nothing....
+        } else {
             try {
                 ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
             } catch (RemoteException e) {
@@ -2580,12 +2584,13 @@ public class PhoneStatusBar extends BaseStatusBar {
                 } catch (URISyntaxException e) {
                 }
             }
-            try {
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(intent);
-            } catch (ActivityNotFoundException e){
-            }
+               try {
+                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                   mContext.startActivity(intent);
+               } catch (ActivityNotFoundException e){
+               }
             animateCollapse();
+            }
         }
     };
 
@@ -2593,6 +2598,9 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         @Override
         public boolean onLongClick(View v) {
+        if (mLongClick.equals(ACTION_NOTHING)) {
+            // Do nothing....
+        } else {
             try {
                 ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
             } catch (RemoteException e) {
@@ -2618,12 +2626,13 @@ public class PhoneStatusBar extends BaseStatusBar {
                 } catch (URISyntaxException e) {
                 }
             }
-            try {
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(intent);
-            } catch (ActivityNotFoundException e){
-            }
+               try {
+                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                   mContext.startActivity(intent);
+               } catch (ActivityNotFoundException e){
+               }
             animateCollapse();
+			}
             return true;
         }
     };
