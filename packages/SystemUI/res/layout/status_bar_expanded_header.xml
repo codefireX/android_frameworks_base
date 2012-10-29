@@ -75,6 +75,7 @@
         />
 
     <FrameLayout
+        android:id="@+id/brightness_layout"
         android:layout_height="48dp">
 
         <TextView
