@@ -74,29 +74,11 @@
         android:layout_weight="1"
         />
 
-    <FrameLayout
-        android:layout_height="48dp">
-
-        <TextView
-            android:textAppearance="@style/TextAppearance.StatusBar.Date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:paddingTop="4dp"
-            android:paddingLeft="10dp"
-            android:gravity="bottom"
-            android:text="@string/brightness_label"
-            android:visibility="invisible" />
-        <com.android.systemui.statusbar.policy.ToggleSlider
-            android:id="@+id/brightness"
-            android:layout_width="wrap_content"
-            android:gravity="bottom"
-            android:layout_height="48dp"
-            systemui:text="@string/status_bar_settings_auto_brightness_label" />
-        <ImageView android:id="@+id/clear_all_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_notify_clear"
-            android:contentDescription="@string/accessibility_clear_all" />
+    <ImageView android:id="@+id/clear_all_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_notify_clear"
+        android:contentDescription="@string/accessibility_clear_all"
+        />
 </LinearLayout>
