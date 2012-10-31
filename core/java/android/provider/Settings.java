@@ -3207,6 +3207,14 @@ public final class Settings {
                 Secure.WIFI_WATCHDOG_BACKGROUND_CHECK_TIMEOUT_MS;
 
         /**
+         * @hide
+         * Show Wifi network name in notification shade
+         * 0 - don't show
+         * 1 - show
+         */
+        public static final String NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";
+
+        /**
          * @deprecated Use
          * {@link android.provider.Settings.Secure#WIFI_WATCHDOG_INITIAL_IGNORED_PING_COUNT} instead
          */
