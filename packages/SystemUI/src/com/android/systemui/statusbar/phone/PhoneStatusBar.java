@@ -30,6 +30,12 @@ import android.app.PendingIntent;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.net.Uri;
+import android.provider.AlarmClock;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -118,6 +124,7 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.net.URISyntaxException;
 
 public class PhoneStatusBar extends BaseStatusBar {
     static final String TAG = "PhoneStatusBar";
@@ -214,6 +221,8 @@ public class PhoneStatusBar extends BaseStatusBar {
     View mClearButton;
     View mSettingsButton;
     RotationToggle mRotationButton;
+    TextView clock;
+    TextView cclock;
 
     // carrier/wifi label
     private TextView mCarrierLabel;
@@ -227,6 +236,16 @@ public class PhoneStatusBar extends BaseStatusBar {
     // clock
     private int mClockStyle;
     LinearLayout mCenterClockLayout;
+
+    // Custom Shade App Launch
+    final static String ACTION_EVENT = "**event**";
+    final static String ACTION_ALARM = "**alarm**";
+    final static String ACTION_TODAY = "**today**";
+    final static String ACTION_VOICEASSIST = "**assist**";
+
+    private Intent intent;
+    private String mShortClick;
+    private String mLongClick;
 
     // drag bar
     CloseDragHandle mCloseView;
@@ -323,6 +342,10 @@ public class PhoneStatusBar extends BaseStatusBar {
                     Settings.System.STATUS_BAR_TRANSPARENCY), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAV_BAR_TRANSPARENCY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_DATE_SHORTCLICK), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_DATE_LONGCLICK), false, this);
             update();
         }
 
@@ -335,6 +358,10 @@ public class PhoneStatusBar extends BaseStatusBar {
             ContentResolver resolver = mContext.getContentResolver();
             mHasNavBar = Settings.System.getInt(resolver,
                     Settings.System.NAVIGATION_BAR_SHOW, 0) != 0;
+            mShortClick = Settings.System.getString(resolver,
+                    Settings.System.NOTIFICATION_DATE_SHORTCLICK);
+            mLongClick = Settings.System.getString(resolver,
+                    Settings.System.NOTIFICATION_DATE_LONGCLICK);
             if (mHasNavBar) {
                 setStatusBarParams(mStatusBarView);
                 setNavigationBarParams();
@@ -553,10 +580,14 @@ public class PhoneStatusBar extends BaseStatusBar {
         mClearButton.setVisibility(View.INVISIBLE);
         mClearButton.setEnabled(false);
         mDateView = (DateView)mStatusBarWindow.findViewById(R.id.date);
+        clock = (TextView)mStatusBarView.findViewById(R.id.clock);
+        cclock = (TextView)mStatusBarView.findViewById(R.id.center_clock);
+        mDateView.setOnClickListener(mDateViewListener);
+        mDateView.setOnLongClickListener(mDateViewLongClickListener);
         mSettingsButton = mStatusBarWindow.findViewById(R.id.settings_button);
         mSettingsButton.setOnClickListener(mSettingsButtonListener);
         mRotationButton = (RotationToggle) mStatusBarWindow.findViewById(R.id.rotation_lock_button);
-        
+
         mScrollView = (ScrollView)mStatusBarWindow.findViewById(R.id.scroll);
         mScrollView.setVerticalScrollBarEnabled(false); // less drawing during pulldowns
         mSettingsButton.setOnLongClickListener(mSettingsLongClickListener);
@@ -689,6 +720,13 @@ public class PhoneStatusBar extends BaseStatusBar {
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         context.registerReceiver(mBroadcastReceiver, filter);
+
+        if (mShortClick == "") {
+            mShortClick = "**alarm**";
+        }
+        if (mLongClick == "") {
+            mLongClick = "**assist**";
+        }
 
         //check for view when not pressed on settings button
         boolean whatIsIt = (Settings.System.getInt(mContext.getContentResolver(),
@@ -1274,8 +1312,6 @@ public class PhoneStatusBar extends BaseStatusBar {
         if (mStatusBarView == null) return;
         ContentResolver resolver = mContext.getContentResolver();
         mClockStyle = (Settings.System.getInt(resolver,Settings.System.STATUS_BAR_CLOCK_STYLE, 1));
-        Clock clock = (Clock) mStatusBarView.findViewById(R.id.clock);
-        CenterClock cclock = (CenterClock) mStatusBarView.findViewById(R.id.center_clock);
         if(mClockStyle != 0 && clock !=null && cclock != null){
             clock.updateClockVisibility(show);
             cclock.updateClockVisibility(show);
@@ -2510,6 +2546,81 @@ public class PhoneStatusBar extends BaseStatusBar {
                     }
                 }).start();
             }
+        }
+    };
+
+   private View.OnClickListener mDateViewListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            try {
+                ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+            } catch (RemoteException e) {
+            }
+            if (mShortClick.equals(ACTION_TODAY)) {
+                 // A date-time specified in milliseconds since the epoch.
+                 long startMillis = System.currentTimeMillis();
+                 Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                 builder.appendPath("time");
+                 ContentUris.appendId(builder, startMillis);
+                 intent = new Intent(Intent.ACTION_VIEW)
+                      .setData(builder.build());
+            } else if (mShortClick.equals(ACTION_EVENT)) {
+                 intent = new Intent(Intent.ACTION_INSERT)
+                      .setData(Events.CONTENT_URI);
+            } else if (mShortClick.equals(ACTION_VOICEASSIST)) {
+                 intent = new Intent(RecognizerIntent.ACTION_WEB_SEARCH);
+            } else if (mShortClick.equals(ACTION_ALARM)) {
+                 intent = new Intent(AlarmClock.ACTION_SET_ALARM);
+            } else {
+                try {
+                    intent = Intent.parseUri(mShortClick, 0);
+                } catch (URISyntaxException e) {
+                }
+            }
+            try {
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
+            } catch (ActivityNotFoundException e){
+            }
+            animateCollapse();
+        }
+    };
+
+    private View.OnLongClickListener mDateViewLongClickListener = new View.OnLongClickListener() {
+
+        @Override
+        public boolean onLongClick(View v) {
+            try {
+                ActivityManagerNative.getDefault().dismissKeyguardOnNextActivity();
+            } catch (RemoteException e) {
+            }
+            if (mLongClick.equals(ACTION_TODAY)) {
+                 // A date-time specified in milliseconds since the epoch.
+                 long startMillis = System.currentTimeMillis();
+                 Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                 builder.appendPath("time");
+                 ContentUris.appendId(builder, startMillis);
+                 intent = new Intent(Intent.ACTION_VIEW)
+                      .setData(builder.build());
+            } else if (mLongClick.equals(ACTION_EVENT)) {
+                 intent = new Intent(Intent.ACTION_INSERT)
+                      .setData(Events.CONTENT_URI);
+            } else if (mLongClick.equals(ACTION_VOICEASSIST)) {
+                 intent = new Intent(RecognizerIntent.ACTION_WEB_SEARCH);
+            } else if (mLongClick.equals(ACTION_ALARM)) {
+                 intent = new Intent(AlarmClock.ACTION_SET_ALARM);
+            } else {
+                try {
+                    intent = Intent.parseUri(mLongClick, 0);
+                } catch (URISyntaxException e) {
+                }
+            }
+            try {
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
+            } catch (ActivityNotFoundException e){
+            }
+            animateCollapse();
+            return true;
         }
     };
 

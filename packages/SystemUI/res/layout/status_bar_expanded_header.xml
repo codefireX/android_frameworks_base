@@ -32,6 +32,7 @@
         android:layout_marginLeft="8dp"
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
+        android:clickable="true"
         />
 
     <com.android.systemui.statusbar.policy.CenterClock
@@ -41,6 +42,7 @@
         android:layout_marginLeft="8dp"
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
+        android:clickable="true"
         />
 
     <com.android.systemui.statusbar.policy.DateView android:id="@+id/date"
@@ -49,6 +51,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Date"
+        android:clickable="true"
         />
 
     <com.android.systemui.statusbar.RotationToggle android:id="@+id/rotation_lock_button"
