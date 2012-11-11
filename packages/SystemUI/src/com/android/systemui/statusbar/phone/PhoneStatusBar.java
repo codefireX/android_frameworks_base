@@ -581,8 +581,6 @@ public class PhoneStatusBar extends BaseStatusBar {
         mClearButton.setVisibility(View.INVISIBLE);
         mClearButton.setEnabled(false);
         mDateView = (DateView)mStatusBarWindow.findViewById(R.id.date);
-        clock = (TextView)mStatusBarView.findViewById(R.id.clock);
-        cclock = (TextView)mStatusBarView.findViewById(R.id.center_clock);
         mDateView.setOnClickListener(mDateViewListener);
         mDateView.setOnLongClickListener(mDateViewLongClickListener);
         mSettingsButton = mStatusBarWindow.findViewById(R.id.settings_button);
@@ -724,7 +722,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         SettingsObserver observer = new SettingsObserver(new Handler());
         observer.observe();
-        updateSettings();
+        update();
 
         if (mShortClick == null || mShortClick == "") {
             mShortClick = "**nothing**";
@@ -1317,6 +1315,8 @@ public class PhoneStatusBar extends BaseStatusBar {
         if (mStatusBarView == null) return;
         ContentResolver resolver = mContext.getContentResolver();
         mClockStyle = (Settings.System.getInt(resolver,Settings.System.STATUS_BAR_CLOCK_STYLE, 1));
+        Clock clock = (Clock) mStatusBarView.findViewById(R.id.clock);
+        CenterClock cclock = (CenterClock) mStatusBarView.findViewById(R.id.center_clock);
         if(mClockStyle != 0 && clock !=null && cclock != null){
             clock.updateClockVisibility(show);
             cclock.updateClockVisibility(show);
