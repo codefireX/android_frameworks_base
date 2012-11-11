@@ -722,7 +722,6 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         SettingsObserver observer = new SettingsObserver(new Handler());
         observer.observe();
-        update();
 
         if (mShortClick == null || mShortClick == "") {
             mShortClick = "**nothing**";
